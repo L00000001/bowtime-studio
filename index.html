@@ -204,10 +204,29 @@ button, a {
 .abtn:hover { background: var(--ink); color: var(--bg); }
 .asent { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.04em; display: none; }
 .asent.show { display: block; }
-.agrid { display: grid; grid-template-columns: repeat(6,1fr); gap: 2px; margin-top: 18px; border-top: 1px solid var(--faint); padding-top: 12px; }
-.athumb { aspect-ratio: 1; overflow: hidden; position: relative; background: var(--faint); }
-.athumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.ax { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; color: var(--faint); }
+.agrid {
+  columns: 2;
+  column-gap: 3px;
+  margin-top: 18px;
+  border-top: 1px solid var(--faint);
+  padding-top: 12px;
+}
+.athumb {
+  break-inside: avoid;
+  margin-bottom: 3px;
+  overflow: hidden;
+  background: var(--faint);
+  display: block;
+}
+.athumb img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.athumb.landscape {
+  column-span: all;
+}
+.ax { display: none; }
 
 /* ─── GM ────────────────────────────────── */
 .gmflag { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.03em; word-spacing: 0.15em; border-bottom: 1px solid var(--faint); padding-bottom: 10px; margin-bottom: 14px; }
@@ -232,7 +251,7 @@ button, a {
 @media (max-width: 600px) {
   .panel { width: 100%; top: 38px; }
   .cmeta { grid-template-columns: 1fr 1fr; }
-  .agrid { grid-template-columns: repeat(4,1fr); }
+  .agrid { columns: 1; }
   .wtbl .wd { display: none; }
 }
 </style>
@@ -449,18 +468,18 @@ button, a {
     <button class="pbar-close" onclick="closeAll()">Close</button>
   </div>
   <div class="agrid">
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00013LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00026LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00039LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00052LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00065LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00078LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00091LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00104LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00117LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00131LUKRIX.jpg" alt=""></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00146LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00013LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00026LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00039LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00052LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00065LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00078LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00091LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00104LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00117LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00131LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00146LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
   </div>
 </div>
 
@@ -592,6 +611,13 @@ button, a {
   window.closeAll    = closeAll;
   window.toggleCase  = toggleCase;
   window.submitArch  = submitArch;
+
+  // archive orientation detection
+  window.orientImg = function(img) {
+    if (img.naturalWidth >= img.naturalHeight) {
+      img.parentElement.classList.add('landscape');
+    }
+  };
 
 })();
 </script>
