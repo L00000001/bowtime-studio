@@ -206,7 +206,7 @@ button, a {
 .asent.show { display: block; }
 .agrid { display: grid; grid-template-columns: repeat(6,1fr); gap: 2px; margin-top: 18px; border-top: 1px solid var(--faint); padding-top: 12px; }
 .athumb { aspect-ratio: 1; overflow: hidden; position: relative; background: var(--faint); }
-.athumb img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) blur(3px); opacity: 0.18; transform: scale(1.08); display: block; }
+.athumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ax { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; color: var(--faint); }
 
 /* ─── GM ────────────────────────────────── */
@@ -445,29 +445,22 @@ button, a {
 <div id="p-archive" class="panel">
   <div class="pbar">
     <span class="pbar-title">Archive — Photography</span>
-    <span class="pbar-meta">2018–2023 / On request</span>
+    <span class="pbar-meta">2018–2023</span>
     <button class="pbar-close" onclick="closeAll()">Close</button>
   </div>
-  <p class="astat">Five years of editorial, documentary, and personal photography. Available on request.</p>
-  <p class="anote">Access is granted individually.<br>Submit your email address below.<br>Response within 48 hours.</p>
-  <div class="aform">
-    <input class="ainput" id="archEmail" type="email" placeholder="Your email">
-    <button class="abtn" onclick="submitArch()">Request</button>
-  </div>
-  <div class="asent" id="archSent">Request received.</div>
   <div class="agrid">
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200" alt=""><div class="ax">—</div></div>
-    <div class="athumb"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=200" alt=""><div class="ax">—</div></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00013LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00026LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00039LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00052LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00065LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00078LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00091LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00104LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00117LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00131LUKRIX.jpg" alt=""></div>
+    <div class="athumb"><img src="IMAGES/ARCHIVE/00146LUKRIX.jpg" alt=""></div>
   </div>
 </div>
 
