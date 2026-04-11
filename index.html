@@ -4,492 +4,200 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BOWTIME STUDIO</title>
-<meta name="description" content="Luk Rix Studio. Luke Frith-Powell. London. Creative direction, fashion, art direction, photography, film. Gentle Mutilation.">
+<meta name="description" content="Luk Rix Studio. Luke Frith-Powell. London.">
 <meta name="keywords" content="Luk Rix, Luke Frith-Powell, Luk Gentle, Gentle Mutilation, Gen Mut">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+:root{--bg:#eeecea;--ink:#111111;--dim:#999999;--faint:#d4d2ce;--dot:#111111}
+[data-mode="dark"]{--bg:#131312;--ink:#d0cdc6;--dim:#565550;--faint:#2a2926;--dot:#d0cdc6}
+body{background:var(--bg);color:var(--ink);font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:10px;font-weight:400;letter-spacing:-0.01em;word-spacing:0.2em;text-transform:uppercase;line-height:1.55;transition:background 0.25s,color 0.25s}
+button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spacing:inherit;text-transform:inherit;font-weight:inherit;background:none;border:none;cursor:pointer;color:inherit;text-decoration:none;padding:0}
 
-:root {
-  --bg:       #eeecea;
-  --ink:      #111111;
-  --dim:      #999999;
-  --faint:    #d4d2ce;
-  --dot:      #111111;
-}
-[data-mode="dark"] {
-  --bg:       #131312;
-  --ink:      #d0cdc6;
-  --dim:      #565550;
-  --faint:    #2a2926;
-  --dot:      #d0cdc6;
-}
+#logo{position:fixed;top:18px;left:20px;z-index:300;font-size:13px;font-weight:500;letter-spacing:0.08em;line-height:1;cursor:pointer;user-select:none}
+#dot{position:fixed;top:22px;right:22px;z-index:300;width:7px;height:7px;border-radius:50%;background:var(--dot);cursor:pointer;border:none;padding:0;transition:background 0.25s,transform 0.08s ease-out}
+#dot.held{transform:scale(2.2)}
 
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  word-spacing: 0.2em;
-  text-transform: uppercase;
-  line-height: 1.55;
-  transition: background 0.25s, color 0.25s;
-}
+#menu{position:fixed;top:0;left:0;z-index:200;padding:46px 0 24px 20px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateY(-10px);transition:opacity 0.15s,transform 0.2s cubic-bezier(0.34,1.5,0.64,1)}
+#menu.open{opacity:1;pointer-events:auto;transform:translateY(0)}
+.mi{font-size:10px;font-weight:400;letter-spacing:0.05em;word-spacing:0.15em;padding:5px 0;color:var(--dim);text-align:left}
+.mi:hover,.mi.on{color:var(--ink)}
+.mi.on{text-decoration:underline;text-underline-offset:2px}
+.mi.focused{color:var(--ink)}
 
-button, a {
-  font-family: inherit; font-size: inherit;
-  letter-spacing: inherit; word-spacing: inherit;
-  text-transform: inherit; font-weight: inherit;
-  background: none; border: none; cursor: pointer;
-  color: inherit; text-decoration: none; padding: 0;
-}
+.panel{position:fixed;top:0;right:0;bottom:0;width:calc(100% - 120px);background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 28px 80px;transform:translateX(105%);pointer-events:none;transition:background 0.25s,transform 0.38s cubic-bezier(0.34,1.22,0.64,1)}
+.panel.open{transform:translateX(0);pointer-events:auto}
 
-/* ─── LOGO ─────────────────────────────── */
-#logo {
-  position: fixed;
-  top: 18px; left: 20px;
-  z-index: 300;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  line-height: 1.2;
-  cursor: pointer;
-  user-select: none;
-}
-#logo small {
-  display: block;
-  font-size: 8px;
-  font-weight: 300;
-  letter-spacing: 0.04em;
-  word-spacing: 0.1em;
-  color: var(--dim);
-  margin-top: 2px;
-}
+.pbar{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--faint);padding-bottom:8px;margin-bottom:24px}
+.pbar-title{font-size:10px;font-weight:500;letter-spacing:0.06em;word-spacing:0}
+.pbar-meta{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.02em;word-spacing:0}
+.pbar-meta:empty{display:none}
 
-/* ─── DOT ───────────────────────────────── */
-#dot {
-  position: fixed;
-  top: 22px; right: 22px;
-  z-index: 300;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--dot);
-  cursor: pointer;
-  border: none; padding: 0;
-  transform: scale(1);
-  transition: background 0.25s, transform 0.08s ease-out;
-}
-#dot.held { transform: scale(2.2); }
+.i-who{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.04em;margin-bottom:14px}
+.i-hed{font-size:13px;font-weight:300;letter-spacing:-0.02em;word-spacing:0.06em;line-height:1.4;text-transform:none;margin-bottom:16px;max-width:360px}
+.i-hed u{text-decoration-thickness:1px;text-underline-offset:3px}
+.i-body{font-size:9px;font-weight:300;color:var(--dim);letter-spacing:0.01em;word-spacing:0.2em;line-height:1.9;margin-bottom:20px;max-width:340px}
+.i-disc{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.04em;word-spacing:0.1em;line-height:2.3;border-top:1px solid var(--faint);padding-top:12px}
 
-/* ─── MENU ──────────────────────────────── */
-#menu {
-  position: fixed;
-  top: 0; left: 0;
-  z-index: 200;
-  padding: 46px 0 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  /* hidden state */
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-10px);
-  transition: opacity 0.15s, transform 0.2s cubic-bezier(0.34,1.5,0.64,1);
-}
-#menu.open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-.mi {
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  word-spacing: 0.15em;
-  padding: 5px 0;
-  color: var(--dim);
-  text-align: left;
-}
-.mi:hover, .mi.on { color: var(--ink); }
-.mi.on { text-decoration: underline; text-underline-offset: 2px; }
-#menu-close {
-  margin-top: 10px;
-  font-size: 8px;
-  font-weight: 300;
-  letter-spacing: 0.04em;
-  word-spacing: 0;
-  color: var(--dim);
-  opacity: 0.6;
-}
-#menu-close:hover { opacity: 1; color: var(--ink); }
+.wtbl{width:100%;border-collapse:collapse}
+.wtbl tr.wrow{border-bottom:1px solid var(--faint);cursor:pointer}
+.wtbl tr.wrow:hover .wt,.wtbl tr.wrow.focused .wt{text-decoration:underline;text-underline-offset:2px;color:var(--ink)}
+.wtbl td{padding:8px 8px 8px 0;vertical-align:top;font-size:9px;letter-spacing:0.02em;word-spacing:0.1em}
+.wtbl td:first-child{padding-left:0;width:38%}
+.wd{color:var(--dim);font-size:8px;font-weight:300}
+.wy{font-size:8px;color:var(--faint);font-weight:300;white-space:nowrap;letter-spacing:0;word-spacing:0}
+.wtog{font-size:10px;color:var(--dim);letter-spacing:0;word-spacing:0;white-space:nowrap;font-weight:300}
+.tag{display:inline-block;border:1px solid var(--faint);padding:0 4px;font-size:7px;font-weight:300;letter-spacing:0.04em;word-spacing:0;margin-right:2px;color:var(--dim)}
 
-/* ─── PANELS ────────────────────────────── */
-.panel {
-  position: fixed;
-  top: 0; right: 0; bottom: 0;
-  width: calc(100% - 120px);
-  background: var(--bg);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 20px 28px 80px;
-  /* hidden: off right edge */
-  transform: translateX(105%);
-  transition: transform 0.38s cubic-bezier(0.34,1.22,0.64,1);
-  pointer-events: none;
-  transition: background 0.25s, transform 0.38s cubic-bezier(0.34,1.22,0.64,1);
-}
-.panel.open {
-  transform: translateX(0);
-  pointer-events: auto;
-}
+.crow td{padding:0!important}
+.cinner{display:none;padding:14px 0 22px;border-top:1px solid var(--faint)}
+.cinner.open{display:block}
+.cimgs{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:14px;height:190px}
+.cimgs img{width:100%;height:100%;object-fit:cover;filter:grayscale(10%);display:block}
+.cmeta{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--faint);border-left:1px solid var(--faint);margin-bottom:14px}
+.cm{border-right:1px solid var(--faint);border-bottom:1px solid var(--faint);padding:6px 8px}
+.cmk{font-size:7px;font-weight:300;color:var(--dim);letter-spacing:0.04em;word-spacing:0;margin-bottom:2px}
+.cmv{font-size:8px;font-weight:400;letter-spacing:0.02em;word-spacing:0.05em}
+.ctxt{font-size:9px;font-weight:300;line-height:1.8;letter-spacing:0.01em;word-spacing:0.15em;color:var(--ink);text-transform:none;max-width:520px;margin-bottom:10px}
+.cnote{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.02em;word-spacing:0.1em;line-height:1.8}
 
-/* panel top bar */
-.pbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  border-bottom: 1px solid var(--faint);
-  padding-bottom: 8px;
-  margin-bottom: 24px;
-}
-.pbar-title { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; word-spacing: 0; }
-.pbar-meta  { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.02em; word-spacing: 0; }
-.pbar-close { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.04em; word-spacing: 0; }
-.pbar-close:hover { color: var(--ink); }
+/* case image carousel */
+.cimgs-wrap{position:relative;overflow:hidden;margin-bottom:14px;height:190px}
+.cimgs-track{display:flex;height:100%;transition:transform 0.28s cubic-bezier(0.34,1.1,0.64,1)}
+.cimgs-slide{flex:0 0 100%;height:100%}
+.cimgs-slide img{width:100%;height:100%;object-fit:cover;filter:grayscale(10%);display:block}
+.cimgs-count{font-size:7px;font-weight:300;color:var(--dim);letter-spacing:0.1em;word-spacing:0;margin-bottom:10px;text-align:right}
 
-/* ─── INDEX ─────────────────────────────── */
-.i-who  { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.04em; margin-bottom: 14px; }
-.i-hed  { font-size: 13px; font-weight: 300; letter-spacing: -0.02em; word-spacing: 0.06em; line-height: 1.4; text-transform: none; margin-bottom: 16px; max-width: 360px; }
-.i-hed u { text-decoration-thickness: 1px; text-underline-offset: 3px; }
-.i-body { font-size: 9px; font-weight: 300; color: var(--dim); letter-spacing: 0.01em; word-spacing: 0.2em; line-height: 1.9; margin-bottom: 20px; max-width: 340px; }
-.i-disc { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.04em; word-spacing: 0.1em; line-height: 2.3; border-top: 1px solid var(--faint); padding-top: 12px; }
+.arc-wrap{position:relative;width:100%;overflow:hidden;background:var(--bg);margin-top:12px}
+.arc-track{display:flex;transition:transform 0.32s cubic-bezier(0.34,1.1,0.64,1);will-change:transform}
+.arc-slide{flex:0 0 100%;width:100%;position:relative;user-select:none}
+.arc-slide img{width:100%;height:auto;display:block;max-height:calc(100vh - 120px);object-fit:contain}
+.arc-prev,.arc-next{position:absolute;top:0;bottom:0;width:50%;cursor:pointer;z-index:10;background:transparent;border:none;padding:0}
+.arc-prev{left:0;cursor:w-resize}
+.arc-next{right:0;cursor:e-resize}
+.arc-count{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.1em;word-spacing:0;padding:8px 0 0;text-align:right}
 
-/* ─── WORK ──────────────────────────────── */
-.wtbl { width: 100%; border-collapse: collapse; }
-.wtbl tr.wrow { border-bottom: 1px solid var(--faint); cursor: pointer; }
-.wtbl tr.wrow:hover .wt { text-decoration: underline; text-underline-offset: 2px; }
-.wtbl td { padding: 8px 10px 8px 0; vertical-align: top; font-size: 9px; font-weight: 400; letter-spacing: 0.02em; word-spacing: 0.1em; }
-.wtbl td:first-child { padding-left: 0; width: 36%; }
-.wd { color: var(--dim); font-size: 8px; font-weight: 300; }
-.wy { font-size: 8px; color: var(--faint); font-weight: 300; white-space: nowrap; letter-spacing: 0; word-spacing: 0; }
-.wtog { font-size: 10px; color: var(--dim); letter-spacing: 0; word-spacing: 0; white-space: nowrap; font-weight: 300; }
-.tag { display: inline-block; border: 1px solid var(--faint); padding: 0 4px; font-size: 7px; font-weight: 300; letter-spacing: 0.04em; word-spacing: 0; margin-right: 2px; color: var(--dim); }
+.gmflag{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.03em;word-spacing:0.15em;border-bottom:1px solid var(--faint);padding-bottom:10px;margin-bottom:14px}
+.gmflag b{color:var(--ink);font-weight:500}
+.gmgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
+.gmcell{aspect-ratio:1;overflow:hidden;position:relative;background:var(--faint);cursor:pointer}
+.gmcell img{width:100%;height:100%;object-fit:cover;filter:grayscale(45%);opacity:0.7;display:block}
+.gmlbl{position:absolute;bottom:0;left:0;right:0;padding:5px 8px;background:rgba(0,0,0,0.38);font-size:7px;font-weight:300;color:#ddd;letter-spacing:0.06em}
 
-/* case study */
-.crow td { padding: 0 !important; }
-.cinner { display: none; padding: 14px 0 22px; border-top: 1px solid var(--faint); }
-.cinner.open { display: block; }
-.cimgs { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 14px; height: 190px; }
-.cimgs img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(10%); display: block; }
-.cmeta { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid var(--faint); border-left: 1px solid var(--faint); margin-bottom: 14px; }
-.cm { border-right: 1px solid var(--faint); border-bottom: 1px solid var(--faint); padding: 6px 8px; }
-.cmk { font-size: 7px; font-weight: 300; color: var(--dim); letter-spacing: 0.04em; word-spacing: 0; margin-bottom: 2px; }
-.cmv { font-size: 8px; font-weight: 400; letter-spacing: 0.02em; word-spacing: 0.05em; }
-.ctxt { font-size: 9px; font-weight: 300; line-height: 1.8; letter-spacing: 0.01em; word-spacing: 0.15em; color: var(--ink); text-transform: none; max-width: 480px; margin-bottom: 10px; }
-.cnote { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.02em; word-spacing: 0.1em; line-height: 1.8; }
-.cclose { display: inline-block; margin-top: 12px; font-size: 8px; font-weight: 300; letter-spacing: 0.04em; word-spacing: 0; text-decoration: underline; text-underline-offset: 2px; color: var(--dim); cursor: pointer; }
+.cbig{font-size:16px;font-weight:300;letter-spacing:-0.01em;word-spacing:0;text-transform:none;line-height:1.4;margin-bottom:14px}
+.cnote2{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.03em;word-spacing:0.15em;line-height:2.0}
+.info-lines{font-size:9px;font-weight:300;letter-spacing:0.02em;word-spacing:0.1em;line-height:2.2;text-transform:uppercase}
+.info-lines a{text-decoration:underline;text-underline-offset:2px}
 
-/* ─── ARCHIVE ───────────────────────────── */
-.astat { font-size: 12px; font-weight: 300; line-height: 1.55; letter-spacing: -0.01em; word-spacing: 0.08em; text-transform: none; margin-bottom: 14px; max-width: 360px; }
-.anote { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.03em; word-spacing: 0.15em; line-height: 2.0; margin-bottom: 18px; }
-.aform { display: flex; max-width: 320px; border: 1px solid var(--ink); margin-bottom: 8px; }
-.ainput { flex: 1; background: transparent; border: none; outline: none; padding: 7px 10px; font-family: 'Inter','Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
-.ainput::placeholder { color: var(--dim); }
-.abtn { border: none; border-left: 1px solid var(--ink); background: transparent; padding: 7px 12px; font-family: 'Inter','Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 8px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; color: var(--ink); }
-.abtn:hover { background: var(--ink); color: var(--bg); }
-.asent { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.04em; display: none; }
-.asent.show { display: block; }
-.agrid {
-  columns: 2;
-  column-gap: 3px;
-  margin-top: 18px;
-  border-top: 1px solid var(--faint);
-  padding-top: 12px;
-}
-.athumb {
-  break-inside: avoid;
-  margin-bottom: 3px;
-  overflow: hidden;
-  background: var(--faint);
-  display: block;
-}
-.athumb img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.athumb.landscape {
-  column-span: all;
-}
-.ax { display: none; }
-
-/* ─── GM ────────────────────────────────── */
-.gmflag { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.03em; word-spacing: 0.15em; border-bottom: 1px solid var(--faint); padding-bottom: 10px; margin-bottom: 14px; }
-.gmflag b { color: var(--ink); font-weight: 500; }
-.gmgrid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
-.gmcell { aspect-ratio: 1; overflow: hidden; position: relative; background: var(--faint); cursor: pointer; }
-.gmcell img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(45%); opacity: 0.7; display: block; }
-.gmlbl { position: absolute; bottom: 0; left: 0; right: 0; padding: 5px 8px; background: rgba(0,0,0,0.38); font-size: 7px; font-weight: 300; color: #ddd; letter-spacing: 0.06em; }
-
-/* ─── INFO ──────────────────────────────── */
-.itbl { width: 100%; border-collapse: collapse; }
-.itbl tr { border-bottom: 1px solid var(--faint); }
-.itbl td { padding: 8px 10px 8px 0; font-size: 9px; font-weight: 300; letter-spacing: 0.02em; word-spacing: 0.1em; vertical-align: top; }
-.itbl td:first-child { color: var(--dim); width: 130px; padding-left: 0; font-size: 8px; }
-.itbl a { text-decoration: underline; text-underline-offset: 2px; }
-
-/* ─── CONTACT ───────────────────────────── */
-.cbig { font-size: 16px; font-weight: 300; letter-spacing: -0.01em; word-spacing: 0; text-transform: none; line-height: 1.4; margin-bottom: 14px; }
-.cnote2 { font-size: 8px; font-weight: 300; color: var(--dim); letter-spacing: 0.03em; word-spacing: 0.15em; line-height: 2.0; }
-
-/* ─── MOBILE ────────────────────────────── */
-@media (max-width: 600px) {
-  .panel { width: 100%; top: 38px; }
-  .cmeta { grid-template-columns: 1fr 1fr; }
-  .agrid { columns: 1; }
-  .wtbl .wd { display: none; }
+@media(max-width:600px){
+  .panel{width:100%;top:38px}
+  .cmeta{grid-template-columns:1fr 1fr}
+  .wtbl .wd,.wtbl .wy{display:none}
 }
 </style>
 </head>
 <body data-mode="dark">
 
-<!-- LOGO -->
-<button id="logo" onclick="toggleMenu()">
-  BOWTIME
-  <small>Studio — London</small>
-</button>
-
-<!-- DOT -->
+<button id="logo" onclick="toggleMenu()">BOWTIME</button>
 <button id="dot"></button>
 
-<!-- MENU -->
 <nav id="menu">
-  <button class="mi" onclick="openPanel('index',this)">Index</button>
-  <button class="mi" onclick="openPanel('work',this)">Work</button>
-  <button class="mi" onclick="openPanel('archive',this)">Archive</button>
-  <button class="mi" onclick="openPanel('gm',this)">Gm Era</button>
-  <button class="mi" onclick="openPanel('info',this)">Info</button>
-  <button class="mi" onclick="openPanel('contact',this)">Contact</button>
-  <button id="menu-close" onclick="toggleMenu()">close</button>
+  <button class="mi" data-panel="index"   onclick="selectPage('index',this)">Index</button>
+  <button class="mi" data-panel="work"    onclick="selectPage('work',this)">Work</button>
+  <button class="mi" data-panel="archive" onclick="selectPage('archive',this)">Archive</button>
+  <button class="mi" data-panel="gm"      onclick="selectPage('gm',this)">Gm Era</button>
+  <button class="mi" data-panel="info"    onclick="selectPage('info',this)">Info</button>
+  <button class="mi" data-panel="contact" onclick="selectPage('contact',this)">Contact</button>
 </nav>
 
-<!-- ═══ PANEL: INDEX ═══ -->
+<!-- INDEX -->
 <div id="p-index" class="panel">
-  <div class="pbar">
-    <span class="pbar-title">Index</span>
-    <span class="pbar-meta">LR — NET</span>
-    <button class="pbar-close" onclick="closeAll()">Close</button>
-  </div>
+  <div class="pbar"><span class="pbar-title">Index</span><span class="pbar-meta"></span></div>
   <div class="i-who">Luke Frith-Powell / Luk Rix Studio</div>
   <div class="i-hed">Independent creative practice.<br>Fashion, object, film,<br>art direction, photography.<br><u>London.</u></div>
   <div class="i-body">Operating since 2016. Previously Gentle Mutilation.<br>Studio work credited as Luk Rix Studio.<br>Available for commission and collaboration.</div>
-  <div class="i-disc">
-    01 — Fashion &amp; Object<br>
-    02 — Art Direction<br>
-    03 — Photography<br>
-    04 — Film &amp; Moving Image<br>
-    05 — Graphic &amp; Digital<br>
-    06 — Architectural &amp; Commercial
-  </div>
+  <div class="i-disc">01 — Fashion &amp; Object<br>02 — Art Direction<br>03 — Photography<br>04 — Film &amp; Moving Image<br>05 — Graphic &amp; Digital<br>06 — Architectural &amp; Commercial</div>
 </div>
 
-<!-- ═══ PANEL: WORK ═══ -->
+<!-- WORK -->
 <div id="p-work" class="panel">
-  <div class="pbar">
-    <span class="pbar-title">Selected Work</span>
-    <span class="pbar-meta">06 / 2020–2025</span>
-    <button class="pbar-close" onclick="closeAll()">Close</button>
-  </div>
+  <div class="pbar"><span class="pbar-title">Selected Work</span><span class="pbar-meta"></span></div>
   <table class="wtbl">
 
-    <tr class="wrow" onclick="toggleCase('c1')">
-      <td class="wt">Café Paradiso<br><span class="tag">Vinyl</span><span class="tag">Print</span></td>
-      <td class="wd">Mykki Blanco / Transgressive</td>
-      <td class="wd">Art Direction</td>
-      <td class="wy">2021</td>
-      <td class="wtog" id="c1b">+</td>
-    </tr>
-    <tr class="crow"><td colspan="5">
-      <div class="cinner" id="c1">
-        <div class="cimgs">
-          <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=900&q=80" alt="">
-          <img src="https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=900&q=80" alt="">
-        </div>
-        <div class="cmeta">
-          <div class="cm"><div class="cmk">Client</div><div class="cmv">Mykki Blanco</div></div>
-          <div class="cm"><div class="cmk">Format</div><div class="cmv">Vinyl LP 12"</div></div>
-          <div class="cm"><div class="cmk">Discipline</div><div class="cmv">Art Direction</div></div>
-          <div class="cm"><div class="cmk">Year</div><div class="cmv">2021</div></div>
-        </div>
-        <p class="ctxt">The concept emerged from a napkin — literally. A real diner napkin, sourced from a specific café, photographed under cellophane. The sleeve becomes its own found object: printed on uncoated stock, the image sits slightly behind the surface. Nothing is designed that didn't already exist.</p>
-        <p class="cnote">Art direction, photography, print specification. Offset lithography on 280gsm uncoated. Vinyl: black 180g.</p>
-        <span class="cclose" onclick="toggleCase('c1')">Close</span>
-      </div>
-    </td></tr>
+    <tr class="wrow" onclick="toggleCase(0)"><td class="wt">Café Paradiso<br><span class="tag">Vinyl</span><span class="tag">Print</span></td><td class="wd">Mykki Blanco / Transgressive</td><td class="wd">Art Direction</td><td class="wy">2021</td><td class="wtog" id="cb0">+</td></tr>
+    <tr class="crow"><td colspan="5"><div class="cinner" id="ci0">
+      <div class="cimgs-wrap"><div class="cimgs-track" id="ct0"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=900&q=80" alt=""></div></div></div>
+      <div class="cimgs-count" id="cc0">1 / 2</div>
+      <div class="cmeta"><div class="cm"><div class="cmk">Client</div><div class="cmv">Mykki Blanco</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">Vinyl LP 12"</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Art Direction</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2021</div></div></div>
+      <p class="ctxt">The concept emerged from a napkin — literally. A real diner napkin, sourced from a specific café, photographed under cellophane. The sleeve becomes its own found object: printed on uncoated stock, the image sits slightly behind the surface.</p>
+      <p class="cnote">Art direction, photography, print specification. Offset lithography on 280gsm uncoated. Vinyl: black 180g.</p>
+    </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase('c2')">
-      <td class="wt">GBIUS Inaugural Pin<br><span class="tag">Object</span><span class="tag">Edition</span></td>
-      <td class="wd">GBIUS</td>
-      <td class="wd">Object Design</td>
-      <td class="wy">2022</td>
-      <td class="wtog" id="c2b">+</td>
-    </tr>
-    <tr class="crow"><td colspan="5">
-      <div class="cinner" id="c2">
-        <div class="cimgs">
-          <img src="https://images.unsplash.com/photo-1625772452859-1c03d884f5e6?w=900&q=80" alt="">
-          <img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?w=900&q=80" alt="">
-        </div>
-        <div class="cmeta">
-          <div class="cm"><div class="cmk">Client</div><div class="cmv">GBIUS</div></div>
-          <div class="cm"><div class="cmk">Format</div><div class="cmv">Hard Enamel 38mm</div></div>
-          <div class="cm"><div class="cmk">Discipline</div><div class="cmv">Object / Industrial</div></div>
-          <div class="cm"><div class="cmk">Edition</div><div class="cmv">250</div></div>
-        </div>
-        <p class="ctxt">Form derives from an axial sonograph — a cross-section of sound mapped as landscape. The Pearl River Delta as seen from orbital altitude, compressed into a 38mm hard enamel object. Six colour fills, gold plating on the metal base.</p>
-        <p class="cnote">Concept, form development, production liaison. Manufactured: Pearl River Delta. Edition of 250.</p>
-        <span class="cclose" onclick="toggleCase('c2')">Close</span>
-      </div>
-    </td></tr>
+    <tr class="wrow" onclick="toggleCase(1)"><td class="wt">GBIUS Inaugural Pin<br><span class="tag">Object</span><span class="tag">Edition</span></td><td class="wd">GBIUS</td><td class="wd">Object Design</td><td class="wy">2022</td><td class="wtog" id="cb1">+</td></tr>
+    <tr class="crow"><td colspan="5"><div class="cinner" id="ci1">
+      <div class="cimgs-wrap"><div class="cimgs-track" id="ct1"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1625772452859-1c03d884f5e6?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?w=900&q=80" alt=""></div></div></div>
+      <div class="cimgs-count" id="cc1">1 / 2</div>
+      <div class="cmeta"><div class="cm"><div class="cmk">Client</div><div class="cmv">GBIUS</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">Hard Enamel 38mm</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Object / Industrial</div></div><div class="cm"><div class="cmk">Edition</div><div class="cmv">250</div></div></div>
+      <p class="ctxt">Form derives from an axial sonograph — a cross-section of sound mapped as landscape. The Pearl River Delta as seen from orbital altitude, compressed into a 38mm hard enamel object. Six colour fills, gold plating on the metal base.</p>
+      <p class="cnote">Concept, form development, production liaison. Manufactured: Pearl River Delta. Edition of 250.</p>
+    </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase('c3')">
-      <td class="wt">LORE<br><span class="tag">Film</span><span class="tag">Styling</span></td>
-      <td class="wd">Independent</td>
-      <td class="wd">Art Direction</td>
-      <td class="wy">2022</td>
-      <td class="wtog" id="c3b">+</td>
-    </tr>
-    <tr class="crow"><td colspan="5">
-      <div class="cinner" id="c3">
-        <div class="cimgs">
-          <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&q=80" alt="">
-          <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=900&q=80" alt="">
-        </div>
-        <div class="cmeta">
-          <div class="cm"><div class="cmk">Type</div><div class="cmv">Independent Film</div></div>
-          <div class="cm"><div class="cmk">Format</div><div class="cmv">Short / 16mm</div></div>
-          <div class="cm"><div class="cmk">Discipline</div><div class="cmv">Art Direction</div></div>
-          <div class="cm"><div class="cmk">Year</div><div class="cmv">2022</div></div>
-        </div>
-        <p class="ctxt">Art direction, costume, set dressing for an independent short. Visual language draws on post-industrial British landscape — concrete, wool, water. Everything worn was sourced or made. Nothing borrowed from costumiers.</p>
-        <p class="cnote">Art direction, styling, set dressing. Shot on 16mm Kodak Vision3. London, 2022.</p>
-        <span class="cclose" onclick="toggleCase('c3')">Close</span>
-      </div>
-    </td></tr>
+    <tr class="wrow" onclick="toggleCase(2)"><td class="wt">LORE<br><span class="tag">Film</span><span class="tag">Styling</span></td><td class="wd">Independent</td><td class="wd">Art Direction</td><td class="wy">2022</td><td class="wtog" id="cb2">+</td></tr>
+    <tr class="crow"><td colspan="5"><div class="cinner" id="ci2">
+      <div class="cimgs-wrap"><div class="cimgs-track" id="ct2"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=900&q=80" alt=""></div></div></div>
+      <div class="cimgs-count" id="cc2">1 / 2</div>
+      <div class="cmeta"><div class="cm"><div class="cmk">Type</div><div class="cmv">Independent Film</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">Short / 16mm</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Art Direction</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2022</div></div></div>
+      <p class="ctxt">Art direction, costume, set dressing for an independent short. Visual language draws on post-industrial British landscape — concrete, wool, water. Everything worn was sourced or made. Nothing borrowed from costumiers.</p>
+      <p class="cnote">Art direction, styling, set dressing. Shot on 16mm Kodak Vision3. London, 2022.</p>
+    </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase('c4')">
-      <td class="wt">Bloobouba / Kxiikxxikiii<br><span class="tag">Fragrance</span><span class="tag">Identity</span></td>
-      <td class="wd">Luk Rix</td>
-      <td class="wd">Product / Identity</td>
-      <td class="wy">2024</td>
-      <td class="wtog" id="c4b">+</td>
-    </tr>
-    <tr class="crow"><td colspan="5">
-      <div class="cinner" id="c4">
-        <div class="cimgs">
-          <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&q=80" alt="">
-          <img src="https://images.unsplash.com/photo-1541643600914-78b084683702?w=900&q=80" alt="">
-        </div>
-        <div class="cmeta">
-          <div class="cm"><div class="cmk">Brand</div><div class="cmv">Luk Rix</div></div>
-          <div class="cm"><div class="cmk">Format</div><div class="cmv">EDT 50ml</div></div>
-          <div class="cm"><div class="cmk">Discipline</div><div class="cmv">Product / Copy</div></div>
-          <div class="cm"><div class="cmk">Status</div><div class="cmv">Pre-Order</div></div>
-        </div>
-        <p class="ctxt">Two EDT fragrances as the inaugural Luk Rix scent objects. Names are phonetic — spelled to be sounded rather than read. Each ships with a multilingual notes booklet across nine languages. The booklet is the product as much as the bottle.</p>
-        <p class="cnote">Creative direction, naming, packaging concept, multilingual copywriting. Bottled in France.</p>
-        <span class="cclose" onclick="toggleCase('c4')">Close</span>
-      </div>
-    </td></tr>
+    <tr class="wrow" onclick="toggleCase(3)"><td class="wt">Bloobouba / Kxiikxxikiii<br><span class="tag">Fragrance</span><span class="tag">Identity</span></td><td class="wd">Luk Rix</td><td class="wd">Product / Identity</td><td class="wy">2024</td><td class="wtog" id="cb3">+</td></tr>
+    <tr class="crow"><td colspan="5"><div class="cinner" id="ci3">
+      <div class="cimgs-wrap"><div class="cimgs-track" id="ct3"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1541643600914-78b084683702?w=900&q=80" alt=""></div></div></div>
+      <div class="cimgs-count" id="cc3">1 / 2</div>
+      <div class="cmeta"><div class="cm"><div class="cmk">Brand</div><div class="cmv">Luk Rix</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">EDT 50ml</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Product / Copy</div></div><div class="cm"><div class="cmk">Status</div><div class="cmv">Pre-Order</div></div></div>
+      <p class="ctxt">Two EDT fragrances as the inaugural Luk Rix scent objects. Names are phonetic — spelled to be sounded rather than read. Each ships with a multilingual notes booklet across nine languages.</p>
+      <p class="cnote">Creative direction, naming, packaging concept, multilingual copywriting. Bottled in France.</p>
+    </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase('c5')">
-      <td class="wt">Hardwear Objects<br><span class="tag">Object</span><span class="tag">Metal</span></td>
-      <td class="wd">Luk Rix</td>
-      <td class="wd">Industrial Design</td>
-      <td class="wy">2024</td>
-      <td class="wtog" id="c5b">+</td>
-    </tr>
-    <tr class="crow"><td colspan="5">
-      <div class="cinner" id="c5">
-        <div class="cimgs">
-          <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=900&q=80" alt="">
-          <img src="https://images.unsplash.com/photo-1616469829941-c7200edec809?w=900&q=80" alt="">
-        </div>
-        <div class="cmeta">
-          <div class="cm"><div class="cmk">Brand</div><div class="cmv">Luk Rix</div></div>
-          <div class="cm"><div class="cmk">Materials</div><div class="cmv">Al / Steel / Bronze</div></div>
-          <div class="cm"><div class="cmk">Discipline</div><div class="cmv">Object Design</div></div>
-          <div class="cm"><div class="cmk">Year</div><div class="cmv">2024</div></div>
-        </div>
-        <p class="ctxt">Machined aluminium lighter case, stainless steel key fob in solid bar stock, cast bronze ear weight. Each piece is a study in weight and finish — how an object sits in a hand, resists being put down.</p>
-        <p class="cnote">Object design, material specification, production liaison.</p>
-        <span class="cclose" onclick="toggleCase('c5')">Close</span>
-      </div>
-    </td></tr>
+    <tr class="wrow" onclick="toggleCase(4)"><td class="wt">Hardwear Objects<br><span class="tag">Object</span><span class="tag">Metal</span></td><td class="wd">Luk Rix</td><td class="wd">Industrial Design</td><td class="wy">2024</td><td class="wtog" id="cb4">+</td></tr>
+    <tr class="crow"><td colspan="5"><div class="cinner" id="ci4">
+      <div class="cimgs-wrap"><div class="cimgs-track" id="ct4"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1616469829941-c7200edec809?w=900&q=80" alt=""></div></div></div>
+      <div class="cimgs-count" id="cc4">1 / 2</div>
+      <div class="cmeta"><div class="cm"><div class="cmk">Brand</div><div class="cmv">Luk Rix</div></div><div class="cm"><div class="cmk">Materials</div><div class="cmv">Al / Steel / Bronze</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Object Design</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2024</div></div></div>
+      <p class="ctxt">Machined aluminium lighter case, stainless steel key fob in solid bar stock, cast bronze ear weight. Each piece is a study in weight and finish — how an object sits in a hand, resists being put down.</p>
+      <p class="cnote">Object design, material specification, production liaison.</p>
+    </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase('c6')">
-      <td class="wt">Softwear Collection<br><span class="tag">Fashion</span><span class="tag">RTW</span></td>
-      <td class="wd">Luk Rix</td>
-      <td class="wd">Fashion Design</td>
-      <td class="wy">2024</td>
-      <td class="wtog" id="c6b">+</td>
-    </tr>
-    <tr class="crow"><td colspan="5">
-      <div class="cinner" id="c6">
-        <div class="cimgs">
-          <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=900&q=80" alt="">
-          <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=900&q=80" alt="">
-        </div>
-        <div class="cmeta">
-          <div class="cm"><div class="cmk">Brand</div><div class="cmv">Luk Rix</div></div>
-          <div class="cm"><div class="cmk">Format</div><div class="cmv">RTW Collection</div></div>
-          <div class="cm"><div class="cmk">Discipline</div><div class="cmv">Fashion / Garment</div></div>
-          <div class="cm"><div class="cmk">Year</div><div class="cmv">2024</div></div>
-        </div>
-        <p class="ctxt">Cotton heavyweight hoodie, PureSilk performance hoodie, London trench in leather and cotton duck. Heavy weight fabrics cut to a relaxed architectural silhouette. Industrial material, couture construction.</p>
-        <p class="cnote">Design, pattern development, material sourcing. Manufactured UK and Portugal.</p>
-        <span class="cclose" onclick="toggleCase('c6')">Close</span>
-      </div>
-    </td></tr>
+    <tr class="wrow" onclick="toggleCase(5)"><td class="wt">Softwear Collection<br><span class="tag">Fashion</span><span class="tag">RTW</span></td><td class="wd">Luk Rix</td><td class="wd">Fashion Design</td><td class="wy">2024</td><td class="wtog" id="cb5">+</td></tr>
+    <tr class="crow"><td colspan="5"><div class="cinner" id="ci5">
+      <div class="cimgs-wrap"><div class="cimgs-track" id="ct5"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=900&q=80" alt=""></div></div></div>
+      <div class="cimgs-count" id="cc5">1 / 2</div>
+      <div class="cmeta"><div class="cm"><div class="cmk">Brand</div><div class="cmv">Luk Rix</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">RTW Collection</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Fashion / Garment</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2024</div></div></div>
+      <p class="ctxt">Cotton heavyweight hoodie, PureSilk performance hoodie, London trench in leather and cotton duck. Heavy weight fabrics cut to a relaxed architectural silhouette. Industrial material, couture construction.</p>
+      <p class="cnote">Design, pattern development, material sourcing. Manufactured UK and Portugal.</p>
+    </div></td></tr>
 
   </table>
 </div>
 
-<!-- ═══ PANEL: ARCHIVE ═══ -->
+<!-- ARCHIVE -->
 <div id="p-archive" class="panel">
-  <div class="pbar">
-    <span class="pbar-title">Archive — Photography</span>
-    <span class="pbar-meta">2018–2023</span>
-    <button class="pbar-close" onclick="closeAll()">Close</button>
+  <div class="pbar"><span class="pbar-title">Archive — Photography</span><span class="pbar-meta" id="arc-count-bar">1 / 146</span></div>
+  <div class="arc-wrap">
+    <div class="arc-track" id="arcTrack"></div>
+    <button class="arc-prev" onclick="arcMove(-1)"></button>
+    <button class="arc-next" onclick="arcMove(1)"></button>
   </div>
-  <div class="agrid">
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00013LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00026LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00039LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00052LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00065LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00078LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00091LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00104LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00117LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00131LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-    <div class="athumb"><img src="IMAGES/ARCHIVE/00146LUKRIX.jpg" alt="" onload="orientImg(this)"></div>
-  </div>
+  <div class="arc-count" id="arcCount">1 / 146</div>
 </div>
 
-<!-- ═══ PANEL: GM ERA ═══ -->
+<!-- GM -->
 <div id="p-gm" class="panel">
-  <div class="pbar">
-    <span class="pbar-title">Gentle Mutilation Era</span>
-    <span class="pbar-meta">@gen.mut / 2016–2022</span>
-    <button class="pbar-close" onclick="closeAll()">Close</button>
-  </div>
+  <div class="pbar"><span class="pbar-title">Gentle Mutilation</span><span class="pbar-meta"></span></div>
   <div class="gmflag"><b>Previous chapter.</b> Work produced under the Gentle Mutilation identity. Retained as record.</div>
   <div class="gmgrid">
     <div class="gmcell"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" alt=""><div class="gmlbl">Lookbook 001</div></div>
@@ -499,127 +207,276 @@ button, a {
   </div>
 </div>
 
-<!-- ═══ PANEL: INFO ═══ -->
+<!-- INFO -->
 <div id="p-info" class="panel">
-  <div class="pbar">
-    <span class="pbar-title">Info</span>
-    <span class="pbar-meta">Studio / Practice</span>
-    <button class="pbar-close" onclick="closeAll()">Close</button>
-  </div>
-  <div style="font-size:9px;font-weight:300;letter-spacing:0.02em;word-spacing:0.1em;line-height:2.2;text-transform:uppercase;">
-    Luk Rix Studio<br>
-    Luke Frith-Powell<br>
-    Luk Gentle / Gentle Mutilation / @gen.mut<br>
-    London, UK<br>
-    2016 — Present<br>
-    Fashion, Object, Art Direction, Photography, Film, Graphic<br>
+  <div class="pbar"><span class="pbar-title">Info</span><span class="pbar-meta"></span></div>
+  <div class="info-lines">
+    Luk Rix Studio<br>Luke Frith-Powell<br>Luk Gentle / Gentle Mutilation / @gen.mut<br>
+    London, UK<br>Fashion, Object, Art Direction, Photography, Film, Graphic<br>
     Clients available on request<br>
-    <a href="https://lukrix.com" style="text-decoration:underline;text-underline-offset:2px;">lukrix.com</a><br>
-    <a href="https://instagram.com/gen.mut" style="text-decoration:underline;text-underline-offset:2px;">@gen.mut</a><br>
-    <a href="https://bowtime.studio" style="text-decoration:underline;text-underline-offset:2px;">bowtime.studio</a>
+    <a href="https://lukrix.com">lukrix.com</a><br>
+    <a href="https://instagram.com/gen.mut">@gen.mut</a><br>
+    <a href="https://bowtime.studio">bowtime.studio</a>
   </div>
 </div>
 
-<!-- ═══ PANEL: CONTACT ═══ -->
+<!-- CONTACT -->
 <div id="p-contact" class="panel">
-  <div class="pbar">
-    <span class="pbar-title">Contact</span>
-    <span class="pbar-meta">Commission / Press / Collab</span>
-    <button class="pbar-close" onclick="closeAll()">Close</button>
-  </div>
-  <div class="cbig"><a href="/cdn-cgi/l/email-protection#c7aea9a1a887abb2acb5aebfe9a4a8aa"><span class="__cf_email__" data-cfemail="b5dcdbd3daf5d9c0dec7dccd9bd6dad8">[email&#160;protected]</span></a></div>
+  <div class="pbar"><span class="pbar-title">Contact</span><span class="pbar-meta"></span></div>
+  <div class="cbig"><a href="mailto:info@lukrix.com">info@lukrix.com</a></div>
   <div class="cnote2">For commissions, collaboration enquiries,<br>press, and archive access requests.<br>London-based. Available internationally.</div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-(function(){
+<script>
+// ─── state ────────────────────────────────────────────
+var menuOpen  = false;
+var menuFocus = 0;
+var caseOpen  = -1;   // -1 = none, 0-5 = open index
+var caseImg   = [];   // current image index per case
+var arcIdx    = 0;
+var arcBuilt  = false;
+var ARC       = 146;
+var PAGES     = ['index','work','archive','gm','info','contact'];
+var NCASES    = 6;
 
-  var menuOpen = false;
+// init caseImg counters
+for(var i=0;i<NCASES;i++) caseImg.push(0);
 
-  function toggleMenu(){
-    menuOpen = !menuOpen;
-    document.getElementById('menu').classList.toggle('open', menuOpen);
-  }
+// ─── helpers ──────────────────────────────────────────
+function mis(){ return Array.from(document.querySelectorAll('.mi')); }
+function pid(){ var p=document.querySelector('.panel.open'); return p?p.id.replace('p-',''):null; }
+function pi(id){ return PAGES.indexOf(id); }
 
-  function openPanel(id, btn){
-    menuOpen = false;
-    document.getElementById('menu').classList.remove('open');
-    // close all panels
-    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('open'); });
-    document.querySelectorAll('.mi').forEach(function(b){ b.classList.remove('on'); });
-    // open target
-    var p = document.getElementById('p-' + id);
-    if(p){ p.classList.add('open'); p.scrollTop = 0; }
-    if(btn){ btn.classList.add('on'); }
-  }
+function setMF(i){
+  menuFocus=Math.max(0,Math.min(i,PAGES.length-1));
+  mis().forEach(function(b,j){ b.classList.toggle('focused',j===menuFocus); });
+}
+function clearMF(){ mis().forEach(function(b){ b.classList.remove('focused'); }); }
 
-  function closeAll(){
-    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('open'); });
-    document.querySelectorAll('.mi').forEach(function(b){ b.classList.remove('on'); });
-  }
-
-  function toggleCase(id){
-    var el = document.getElementById(id);
-    var btn = document.getElementById(id + 'b');
-    var wasOpen = el.classList.contains('open');
-    document.querySelectorAll('.cinner.open').forEach(function(c){ c.classList.remove('open'); });
-    document.querySelectorAll('.wtog').forEach(function(b){ b.textContent = '+'; });
-    if(!wasOpen){
-      el.classList.add('open');
-      if(btn) btn.textContent = '−';
-    }
-  }
-
-  // dot: hold = enlarge, release = toggle mode
-  var dot = document.getElementById('dot');
-
-  function dotDown(e){
-    e.preventDefault();
-    dot.classList.add('held');
-  }
-  function dotUp(e){
-    e.preventDefault();
-    dot.classList.remove('held');
-    var dark = document.body.getAttribute('data-mode') === 'dark';
-    document.body.setAttribute('data-mode', dark ? 'light' : 'dark');
-  }
-
-  dot.addEventListener('mousedown', dotDown);
-  dot.addEventListener('mouseup',   dotUp);
-  dot.addEventListener('touchstart', dotDown, {passive:false});
-  dot.addEventListener('touchend',   dotUp,   {passive:false});
-
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape'){
-      if(document.querySelector('.panel.open')) closeAll();
-      else if(menuOpen) toggleMenu();
-    }
+function setRowHL(i){
+  document.querySelectorAll('.wtbl tr.wrow').forEach(function(r,j){
+    r.classList.toggle('focused',j===i);
   });
+}
 
-  function submitArch(){
-    var email = document.getElementById('archEmail').value.trim();
-    if(!email || !email.includes('@')) return;
-    document.getElementById('archEmail').value = '';
-    var s = document.getElementById('archSent');
-    s.classList.add('show');
-    setTimeout(function(){ s.classList.remove('show'); }, 6000);
+// ─── menu ─────────────────────────────────────────────
+window.toggleMenu = function(){
+  menuOpen=!menuOpen;
+  document.getElementById('menu').classList.toggle('open',menuOpen);
+  if(menuOpen){ var cur=pid(); setMF(cur?pi(cur):0); }
+  else clearMF();
+};
+
+// ─── panels ───────────────────────────────────────────
+window.selectPage = function(id,btn){
+  if(pid()===id){ closePanel(); return; }
+  openPanel(id);
+};
+
+function openPanel(id){
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('open'); });
+  mis().forEach(function(b){ b.classList.remove('on'); });
+  var p=document.getElementById('p-'+id);
+  if(p){ p.classList.add('open'); p.scrollTop=0; }
+  var b=document.querySelector('.mi[data-panel="'+id+'"]');
+  if(b) b.classList.add('on');
+  setMF(pi(id));
+  if(id==='archive') buildCarousel();
+  // reset case state when entering work
+  if(id!=='work'){ caseOpen=-1; setRowHL(-1); }
+}
+
+function closePanel(){
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('open'); });
+  mis().forEach(function(b){ b.classList.remove('on','focused'); });
+  closeCase();
+}
+
+// ─── cases ────────────────────────────────────────────
+window.toggleCase = function(idx){
+  if(caseOpen===idx){ closeCase(); return; }
+  closeCase();
+  caseOpen=idx;
+  var el=document.getElementById('ci'+idx);
+  var btn=document.getElementById('cb'+idx);
+  if(el){ el.classList.add('open'); el.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+  if(btn) btn.textContent='−';
+  setRowHL(idx);
+  updateCaseImgs(idx);
+};
+
+function closeCase(){
+  if(caseOpen>=0){
+    var el=document.getElementById('ci'+caseOpen);
+    var btn=document.getElementById('cb'+caseOpen);
+    if(el) el.classList.remove('open');
+    if(btn) btn.textContent='+';
+  }
+  caseOpen=-1;
+  setRowHL(-1);
+}
+
+// per-case image carousel
+function updateCaseImgs(idx){
+  var track=document.getElementById('ct'+idx);
+  var count=document.getElementById('cc'+idx);
+  if(!track) return;
+  var total=track.children.length;
+  var ci=caseImg[idx];
+  track.style.transform='translateX(-'+(ci*100)+'%)';
+  if(count) count.textContent=(ci+1)+' / '+total;
+}
+
+function caseImgMove(dir){
+  if(caseOpen<0) return;
+  var track=document.getElementById('ct'+caseOpen);
+  if(!track) return;
+  var total=track.children.length;
+  caseImg[caseOpen]=(caseImg[caseOpen]+dir+total)%total;
+  updateCaseImgs(caseOpen);
+}
+
+// ─── archive carousel ─────────────────────────────────
+function arcFile(n){ return 'IMAGES/ARCHIVE/'+String(n).padStart(5,'0')+'LUKRIX.jpg'; }
+
+function buildCarousel(){
+  if(arcBuilt) return; arcBuilt=true;
+  var track=document.getElementById('arcTrack');
+  for(var i=1;i<=ARC;i++){
+    var slide=document.createElement('div'); slide.className='arc-slide';
+    var img=document.createElement('img'); img.alt='';
+    if(i<=3){ img.src=arcFile(i); } else { img.dataset.src=arcFile(i); }
+    slide.appendChild(img); track.appendChild(slide);
+  }
+  arcUpdate();
+}
+
+function arcUpdate(){
+  var track=document.getElementById('arcTrack');
+  track.style.transform='translateX(-'+(arcIdx*100)+'%)';
+  var label=(arcIdx+1)+' / '+ARC;
+  var c=document.getElementById('arcCount');
+  var cb=document.getElementById('arc-count-bar');
+  if(c) c.textContent=label;
+  if(cb) cb.textContent=label;
+  var slides=track.querySelectorAll('.arc-slide img');
+  [arcIdx,arcIdx+1,arcIdx+2].forEach(function(i){
+    if(slides[i]&&slides[i].dataset.src){ slides[i].src=slides[i].dataset.src; delete slides[i].dataset.src; }
+  });
+}
+
+window.arcMove = function(dir){
+  arcIdx=(arcIdx+dir+ARC)%ARC;
+  arcUpdate();
+};
+
+// ─── dot ──────────────────────────────────────────────
+var dot=document.getElementById('dot');
+function toggleMode(){ var d=document.body.getAttribute('data-mode')==='dark'; document.body.setAttribute('data-mode',d?'light':'dark'); }
+dot.addEventListener('mousedown',  function(e){ e.preventDefault(); dot.classList.add('held'); });
+dot.addEventListener('mouseup',    function(e){ e.preventDefault(); dot.classList.remove('held'); toggleMode(); });
+dot.addEventListener('touchstart', function(e){ e.preventDefault(); dot.classList.add('held'); },{passive:false});
+dot.addEventListener('touchend',   function(e){ e.preventDefault(); dot.classList.remove('held'); toggleMode(); },{passive:false});
+dot.addEventListener('click',      function(e){ e.stopPropagation(); });
+
+// ─── keyboard ─────────────────────────────────────────
+// ↓         = open menu / down menu / down work rows
+// ↑         = up menu (top→close) / up work rows
+// →         = open panel from menu / open case from row / next image in case or archive
+// ←         = prev image in case or archive / close case / close panel+reopen menu
+// Escape    = close case → close panel → close menu
+
+document.addEventListener('keydown',function(e){
+  var cur=pid();
+  var k=e.key;
+
+  // Escape chain
+  if(k==='Escape'){
+    if(cur==='work'&&caseOpen>=0){ e.preventDefault(); closeCase(); return; }
+    if(cur){ e.preventDefault(); closePanel(); window.toggleMenu(); return; }
+    if(menuOpen){ e.preventDefault(); window.toggleMenu(); return; }
+    return;
   }
 
-  // expose to inline onclick
-  window.toggleMenu  = toggleMenu;
-  window.openPanel   = openPanel;
-  window.closeAll    = closeAll;
-  window.toggleCase  = toggleCase;
-  window.submitArch  = submitArch;
+  // nothing open — ↓ opens menu
+  if(!menuOpen&&!cur){
+    if(k==='ArrowDown'){ e.preventDefault(); window.toggleMenu(); }
+    return;
+  }
 
-  // archive orientation detection
-  window.orientImg = function(img) {
-    if (img.naturalWidth >= img.naturalHeight) {
-      img.parentElement.classList.add('landscape');
+  // menu open
+  if(menuOpen){
+    if(k==='ArrowDown'){ e.preventDefault(); setMF(menuFocus+1); return; }
+    if(k==='ArrowUp'){
+      e.preventDefault();
+      if(menuFocus<=0){ window.toggleMenu(); return; }
+      setMF(menuFocus-1); return;
     }
-  };
+    if(k==='ArrowRight'||k==='Enter'){ e.preventDefault(); openPanel(PAGES[menuFocus]); return; }
+    if(k==='ArrowLeft'){ e.preventDefault(); window.toggleMenu(); return; }
+  }
 
-})();
+  // panel open
+  if(cur){
+
+    // archive: ← → images
+    if(cur==='archive'){
+      if(k==='ArrowRight'){ e.preventDefault(); window.arcMove(1); return; }
+      if(k==='ArrowLeft'){  e.preventDefault(); window.arcMove(-1); return; }
+    }
+
+    // work panel
+    if(cur==='work'){
+      // case open: → next image, ← prev image or close case
+      if(caseOpen>=0){
+        if(k==='ArrowRight'){ e.preventDefault(); caseImgMove(1); return; }
+        if(k==='ArrowLeft'){
+          e.preventDefault();
+          if(caseImg[caseOpen]>0){ caseImgMove(-1); }
+          else { closeCase(); }
+          return;
+        }
+      }
+      // ↓ = next row / open if none focused
+      if(k==='ArrowDown'){
+        e.preventDefault();
+        var next=caseOpen<0 ? 0 : Math.min(caseOpen+1,NCASES-1);
+        window.toggleCase(next); return;
+      }
+      // ↑ = prev row / close if at top
+      if(k==='ArrowUp'){
+        e.preventDefault();
+        if(caseOpen<=0){ closeCase(); return; }
+        window.toggleCase(caseOpen-1); return;
+      }
+      // → opens focused/first case
+      if(k==='ArrowRight'){
+        e.preventDefault();
+        window.toggleCase(caseOpen<0?0:caseOpen); return;
+      }
+      // ← closes panel back to menu
+      if(k==='ArrowLeft'){
+        e.preventDefault();
+        closeCase(); closePanel(); window.toggleMenu(); return;
+      }
+    }
+
+    // any panel: ← = close panel, reopen menu
+    if(k==='ArrowLeft'){
+      e.preventDefault();
+      closePanel(); window.toggleMenu(); return;
+    }
+    // any panel: ↓↑ switch between pages
+    if(k==='ArrowDown'){
+      e.preventDefault();
+      var ni=pi(cur); if(ni<PAGES.length-1) openPanel(PAGES[ni+1]); return;
+    }
+    if(k==='ArrowUp'){
+      e.preventDefault();
+      var pi2=pi(cur); if(pi2>0){ openPanel(PAGES[pi2-1]); } else { closePanel(); window.toggleMenu(); } return;
+    }
+  }
+});
 </script>
 </body>
 </html>
