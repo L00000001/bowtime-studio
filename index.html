@@ -16,6 +16,7 @@ html,body{height:100%;overflow:hidden}
 [data-mode="dark"]{--bg:#131312;--ink:#d0cdc6;--dim:#565550;--faint:#2a2926;--dot:#d0cdc6}
 body{background:var(--bg);color:var(--ink);font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:10px;font-weight:400;letter-spacing:-0.01em;word-spacing:0.2em;text-transform:uppercase;line-height:1.55;transition:background 0.25s,color 0.25s}
 button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spacing:inherit;text-transform:inherit;font-weight:inherit;background:none;border:none;cursor:pointer;color:inherit;text-decoration:none;padding:0}
+input,textarea{font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif}
 
 #logo{position:fixed;top:18px;left:20px;z-index:300;font-size:13px;font-weight:500;letter-spacing:0.08em;line-height:1;cursor:pointer;user-select:none}
 #dot{position:fixed;top:22px;right:22px;z-index:300;width:7px;height:7px;border-radius:50%;background:var(--dot);cursor:pointer;border:none;padding:0;transition:background 0.25s,transform 0.08s ease-out}
@@ -30,7 +31,6 @@ button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spaci
 
 .panel{position:fixed;top:0;right:0;bottom:0;width:calc(100% - 120px);background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 28px 80px;transform:translateX(105%);pointer-events:none;transition:background 0.25s,transform 0.38s cubic-bezier(0.34,1.22,0.64,1)}
 .panel.open{transform:translateX(0);pointer-events:auto}
-
 .pbar{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--faint);padding-bottom:8px;margin-bottom:24px}
 .pbar-title{font-size:10px;font-weight:500;letter-spacing:0.06em;word-spacing:0}
 .pbar-meta{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.02em;word-spacing:0}
@@ -42,6 +42,29 @@ button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spaci
 .i-body{font-size:9px;font-weight:300;color:var(--dim);letter-spacing:0.01em;word-spacing:0.2em;line-height:1.9;margin-bottom:20px;max-width:340px}
 .i-disc{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.04em;word-spacing:0.1em;line-height:2.3;border-top:1px solid var(--faint);padding-top:12px}
 
+/* ACCESS GATE */
+.gate{margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--faint)}
+.gate.hidden{display:none}
+.gate-ids{display:flex;gap:8px;margin-bottom:10px}
+.gate-id{width:36px;background:transparent;border:none;border-bottom:1px solid var(--faint);padding:4px 0;font-size:9px;font-weight:300;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);text-align:center;outline:none}
+.gate-id:focus{border-bottom-color:var(--ink)}
+.gate-id::placeholder{color:var(--dim)}
+.gate-field{width:100%;max-width:240px;background:transparent;border:none;border-bottom:1px solid var(--faint);padding:4px 0;font-size:9px;font-weight:300;letter-spacing:0.06em;text-transform:none;color:var(--ink);outline:none;display:block;margin-bottom:10px}
+.gate-field:focus{border-bottom-color:var(--ink)}
+.gate-field::placeholder{color:var(--dim);text-transform:uppercase;letter-spacing:0.06em}
+.gate-note{width:100%;max-width:240px;background:transparent;border:none;border-bottom:1px solid var(--faint);padding:4px 0;font-size:9px;font-weight:300;letter-spacing:0.06em;text-transform:none;color:var(--ink);outline:none;display:block;resize:none;margin-bottom:14px;line-height:1.8}
+.gate-note:focus{border-bottom-color:var(--ink)}
+.gate-note::placeholder{color:var(--dim);text-transform:uppercase;letter-spacing:0.06em}
+.gate-confirm{font-size:9px;font-weight:300;letter-spacing:0.15em;color:var(--dim);cursor:pointer;text-transform:uppercase}
+.gate-confirm:hover{color:var(--ink)}
+.gate-msg{font-size:8px;font-weight:300;letter-spacing:0.08em;color:var(--dim);margin-top:8px;display:none;text-transform:uppercase}
+.gate-msg.show{display:block}
+.gate-msg.err{color:#a04030}
+
+/* locked state — table dims */
+.work-locked .wtbl{opacity:0.2;pointer-events:none;user-select:none}
+
+/* WORK TABLE */
 .wtbl{width:100%;border-collapse:collapse}
 .wtbl tr.wrow{border-bottom:1px solid var(--faint);cursor:pointer}
 .wtbl tr.wrow:hover .wt,.wtbl tr.wrow.focused .wt{text-decoration:underline;text-underline-offset:2px;color:var(--ink)}
@@ -51,12 +74,14 @@ button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spaci
 .wy{font-size:8px;color:var(--faint);font-weight:300;white-space:nowrap;letter-spacing:0;word-spacing:0}
 .wtog{font-size:10px;color:var(--dim);letter-spacing:0;word-spacing:0;white-space:nowrap;font-weight:300}
 .tag{display:inline-block;border:1px solid var(--faint);padding:0 4px;font-size:7px;font-weight:300;letter-spacing:0.04em;word-spacing:0;margin-right:2px;color:var(--dim)}
-
 .crow td{padding:0!important}
 .cinner{display:none;padding:14px 0 22px;border-top:1px solid var(--faint)}
 .cinner.open{display:block}
-.cimgs{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:14px;height:190px}
-.cimgs img{width:100%;height:100%;object-fit:cover;filter:grayscale(10%);display:block}
+.cimgs-wrap{position:relative;overflow:hidden;margin-bottom:14px;height:190px}
+.cimgs-track{display:flex;height:100%;transition:none}
+.cimgs-slide{flex:0 0 100%;height:100%}
+.cimgs-slide img{width:100%;height:100%;object-fit:cover;filter:grayscale(10%);display:block}
+.cimgs-count{font-size:7px;font-weight:300;color:var(--dim);letter-spacing:0.1em;word-spacing:0;margin-bottom:10px;text-align:right}
 .cmeta{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--faint);border-left:1px solid var(--faint);margin-bottom:14px}
 .cm{border-right:1px solid var(--faint);border-bottom:1px solid var(--faint);padding:6px 8px}
 .cmk{font-size:7px;font-weight:300;color:var(--dim);letter-spacing:0.04em;word-spacing:0;margin-bottom:2px}
@@ -64,28 +89,25 @@ button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spaci
 .ctxt{font-size:9px;font-weight:300;line-height:1.8;letter-spacing:0.01em;word-spacing:0.15em;color:var(--ink);text-transform:none;max-width:520px;margin-bottom:10px}
 .cnote{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.02em;word-spacing:0.1em;line-height:1.8}
 
-/* case image carousel */
-.cimgs-wrap{position:relative;overflow:hidden;margin-bottom:14px;height:190px}
-.cimgs-track{display:flex;height:100%;transition:transform 0.28s cubic-bezier(0.34,1.1,0.64,1)}
-.cimgs-slide{flex:0 0 100%;height:100%}
-.cimgs-slide img{width:100%;height:100%;object-fit:cover;filter:grayscale(10%);display:block}
-.cimgs-count{font-size:7px;font-weight:300;color:var(--dim);letter-spacing:0.1em;word-spacing:0;margin-bottom:10px;text-align:right}
-
-.arc-wrap{position:relative;width:100%;overflow:hidden;background:var(--bg);margin-top:12px}
-.arc-track{display:flex;transition:transform 0.32s cubic-bezier(0.34,1.1,0.64,1);will-change:transform}
-.arc-slide{flex:0 0 100%;width:100%;position:relative;user-select:none}
-.arc-slide img{width:100%;height:auto;display:block;max-height:calc(100vh - 120px);object-fit:contain}
-.arc-prev,.arc-next{position:absolute;top:0;bottom:0;width:50%;cursor:pointer;z-index:10;background:transparent;border:none;padding:0}
-.arc-prev{left:0;cursor:w-resize}
-.arc-next{right:0;cursor:e-resize}
-.arc-count{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.1em;word-spacing:0;padding:8px 0 0;text-align:right}
-
-.gmflag{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.03em;word-spacing:0.15em;border-bottom:1px solid var(--faint);padding-bottom:10px;margin-bottom:14px}
-.gmflag b{color:var(--ink);font-weight:500}
-.gmgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
-.gmcell{aspect-ratio:1;overflow:hidden;position:relative;background:var(--faint);cursor:pointer}
-.gmcell img{width:100%;height:100%;object-fit:cover;filter:grayscale(45%);opacity:0.7;display:block}
-.gmlbl{position:absolute;bottom:0;left:0;right:0;padding:5px 8px;background:rgba(0,0,0,0.38);font-size:7px;font-weight:300;color:#ddd;letter-spacing:0.06em}
+/* ARCHIVE FOLDERS */
+.ftbl{width:100%;border-collapse:collapse}
+.ftbl tr.frow{border-bottom:1px solid var(--faint);cursor:pointer}
+.ftbl tr.frow:hover .ft,.ftbl tr.frow.ffocused .ft{text-decoration:underline;text-underline-offset:2px;color:var(--ink)}
+.ftbl td{padding:8px 8px 8px 0;vertical-align:top;font-size:9px;letter-spacing:0.02em;word-spacing:0.1em}
+.ftbl td:first-child{padding-left:0}
+.ftog{font-size:10px;color:var(--dim);letter-spacing:0;word-spacing:0;white-space:nowrap;font-weight:300}
+.fd{color:var(--dim);font-size:8px;font-weight:300;white-space:nowrap}
+.frow-inner td{padding:0!important}
+.finner{display:none;padding:14px 0 22px;border-top:1px solid var(--faint)}
+.finner.open{display:block}
+.farc-wrap{position:relative;width:100%;overflow:hidden}
+.farc-track{display:flex;transition:none;will-change:transform}
+.farc-slide{flex:0 0 100%;width:100%;user-select:none}
+.farc-slide img{width:100%;height:auto;display:block;max-height:calc(100vh - 180px);object-fit:contain}
+.farc-nav{display:flex;justify-content:space-between;padding:6px 0 0}
+.farc-btn{font-size:9px;font-weight:300;color:var(--dim);letter-spacing:0.1em;word-spacing:0;padding:4px 0;cursor:pointer}
+.farc-btn:hover{color:var(--ink)}
+.farc-count{font-size:7px;font-weight:300;color:var(--dim);letter-spacing:0.1em;word-spacing:0;text-align:right;padding-top:2px}
 
 .cbig{font-size:16px;font-weight:300;letter-spacing:-0.01em;word-spacing:0;text-transform:none;line-height:1.4;margin-bottom:14px}
 .cnote2{font-size:8px;font-weight:300;color:var(--dim);letter-spacing:0.03em;word-spacing:0.15em;line-height:2.0}
@@ -95,7 +117,7 @@ button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spaci
 @media(max-width:600px){
   .panel{width:100%;top:38px}
   .cmeta{grid-template-columns:1fr 1fr}
-  .wtbl .wd,.wtbl .wy{display:none}
+  .wtbl .wd,.wtbl .wy,.ftbl .fd{display:none}
 }
 </style>
 </head>
@@ -105,56 +127,66 @@ button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spaci
 <button id="dot"></button>
 
 <nav id="menu">
-  <button class="mi" data-panel="index"   onclick="selectPage('index',this)">Index</button>
-  <button class="mi" data-panel="work"    onclick="selectPage('work',this)">Work</button>
-  <button class="mi" data-panel="archive" onclick="selectPage('archive',this)">Archive</button>
-  <button class="mi" data-panel="gm"      onclick="selectPage('gm',this)">Gm Era</button>
-  <button class="mi" data-panel="info"    onclick="selectPage('info',this)">Info</button>
-  <button class="mi" data-panel="contact" onclick="selectPage('contact',this)">Contact</button>
+  <button class="mi" data-panel="index"   onclick="selectPage('index')">Index</button>
+  <button class="mi" data-panel="work"    onclick="selectPage('work')">Work</button>
+  <button class="mi" data-panel="archive" onclick="selectPage('archive')">Archive</button>
+  <button class="mi" data-panel="info"    onclick="selectPage('info')">Info</button>
+  <button class="mi" data-panel="contact" onclick="selectPage('contact')">Contact</button>
 </nav>
 
 <!-- INDEX -->
 <div id="p-index" class="panel">
   <div class="pbar"><span class="pbar-title">Index</span><span class="pbar-meta"></span></div>
-  <div class="i-who">Luke Frith-Powell / Luk Rix Studio</div>
-  <div class="i-hed">Independent creative practice.<br>Fashion, object, film,<br>art direction, photography.<br><u>London.</u></div>
-  <div class="i-body">Operating since 2016. Previously Gentle Mutilation.<br>Studio work credited as Luk Rix Studio.<br>Available for commission and collaboration.</div>
+  <div class="i-who">BOWTIME</div>
+  <div class="i-hed">Independent creative corporation.<br>Haptic, object, optic,<br>acoustic, olfactory, + film.<br><u>London.</u></div>
+  <div class="i-body">Operating since 2016. The teams behind Noxiouscrush, Love-Popup, Gentle Mutilation and more.<br>Studio + Commercial.<br>Available for commission and collaboration.</div>
   <div class="i-disc">01 — Fashion &amp; Object<br>02 — Art Direction<br>03 — Photography<br>04 — Film &amp; Moving Image<br>05 — Graphic &amp; Digital<br>06 — Architectural &amp; Commercial</div>
 </div>
 
 <!-- WORK -->
-<div id="p-work" class="panel">
+<div id="p-work" class="panel work-locked">
   <div class="pbar"><span class="pbar-title">Selected Work</span><span class="pbar-meta"></span></div>
-  <table class="wtbl">
 
+  <div class="gate" id="workGate">
+    <div class="gate-ids">
+      <input class="gate-id" id="gid1" maxlength="1" placeholder="—">
+      <input class="gate-id" id="gid2" maxlength="1" placeholder="—">
+      <input class="gate-id" id="gid3" maxlength="1" placeholder="—">
+    </div>
+    <input class="gate-field" id="gateEmail" type="email" placeholder="Email">
+    <textarea class="gate-note" id="gateNote" rows="3" placeholder="Note"></textarea>
+    <button class="gate-confirm" onclick="gateSubmit()">Confirm</button>
+    <div class="gate-msg" id="gateMsg"></div>
+  </div>
+
+  <table class="wtbl">
     <tr class="wrow" onclick="toggleCase(0)"><td class="wt">Café Paradiso<br><span class="tag">Vinyl</span><span class="tag">Print</span></td><td class="wd">Mykki Blanco / Transgressive</td><td class="wd">Art Direction</td><td class="wy">2021</td><td class="wtog" id="cb0">+</td></tr>
     <tr class="crow"><td colspan="5"><div class="cinner" id="ci0">
       <div class="cimgs-wrap"><div class="cimgs-track" id="ct0"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=900&q=80" alt=""></div></div></div>
       <div class="cimgs-count" id="cc0">1 / 2</div>
       <div class="cmeta"><div class="cm"><div class="cmk">Client</div><div class="cmv">Mykki Blanco</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">Vinyl LP 12"</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Art Direction</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2021</div></div></div>
-      <p class="ctxt">The concept emerged from a napkin — literally. A real diner napkin, sourced from a specific café, photographed under cellophane. The sleeve becomes its own found object: printed on uncoated stock, the image sits slightly behind the surface.</p>
-      <p class="cnote">Art direction, photography, print specification. Offset lithography on 280gsm uncoated. Vinyl: black 180g.</p>
+      <p class="ctxt">Conceptual world building around the album Café Paradiso by Mykki Blanco.</p>
     </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase(1)"><td class="wt">GBIUS Inaugural Pin<br><span class="tag">Object</span><span class="tag">Edition</span></td><td class="wd">GBIUS</td><td class="wd">Object Design</td><td class="wy">2022</td><td class="wtog" id="cb1">+</td></tr>
+    <tr class="wrow" onclick="toggleCase(1)"><td class="wt">GBIUS<br><span class="tag">Object</span><span class="tag">Edition</span></td><td class="wd">GBIUS</td><td class="wd">Object Design</td><td class="wy">2022</td><td class="wtog" id="cb1">+</td></tr>
     <tr class="crow"><td colspan="5"><div class="cinner" id="ci1">
       <div class="cimgs-wrap"><div class="cimgs-track" id="ct1"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1625772452859-1c03d884f5e6?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?w=900&q=80" alt=""></div></div></div>
       <div class="cimgs-count" id="cc1">1 / 2</div>
-      <div class="cmeta"><div class="cm"><div class="cmk">Client</div><div class="cmv">GBIUS</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">Hard Enamel 38mm</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Object / Industrial</div></div><div class="cm"><div class="cmk">Edition</div><div class="cmv">250</div></div></div>
-      <p class="ctxt">Form derives from an axial sonograph — a cross-section of sound mapped as landscape. The Pearl River Delta as seen from orbital altitude, compressed into a 38mm hard enamel object. Six colour fills, gold plating on the metal base.</p>
-      <p class="cnote">Concept, form development, production liaison. Manufactured: Pearl River Delta. Edition of 250.</p>
+      <div class="cmeta"><div class="cm"><div class="cmk">Client</div><div class="cmv">GBIUS</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">Hard Enamel 38mm</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Object / Industrial</div></div><div class="cm"><div class="cmk">Edition</div><div class="cmv">500</div></div></div>
+      <p class="ctxt">Guangdong-Hong Kong-Macao Greater Bay Area International Ultrasound Forum pin badge design.</p>
+      <p class="cnote">Concept, form development, production liaison. Manufactured: Pearl River Delta. Edition of 500.</p>
     </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase(2)"><td class="wt">LORE<br><span class="tag">Film</span><span class="tag">Styling</span></td><td class="wd">Independent</td><td class="wd">Art Direction</td><td class="wy">2022</td><td class="wtog" id="cb2">+</td></tr>
+    <tr class="wrow" onclick="toggleCase(2)"><td class="wt">LOVE<br><span class="tag">Film</span><span class="tag">Styling</span></td><td class="wd">Independent</td><td class="wd">Art Direction</td><td class="wy">2024</td><td class="wtog" id="cb2">+</td></tr>
     <tr class="crow"><td colspan="5"><div class="cinner" id="ci2">
       <div class="cimgs-wrap"><div class="cimgs-track" id="ct2"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=900&q=80" alt=""></div></div></div>
       <div class="cimgs-count" id="cc2">1 / 2</div>
-      <div class="cmeta"><div class="cm"><div class="cmk">Type</div><div class="cmv">Independent Film</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">Short / 16mm</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Art Direction</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2022</div></div></div>
-      <p class="ctxt">Art direction, costume, set dressing for an independent short. Visual language draws on post-industrial British landscape — concrete, wool, water. Everything worn was sourced or made. Nothing borrowed from costumiers.</p>
-      <p class="cnote">Art direction, styling, set dressing. Shot on 16mm Kodak Vision3. London, 2022.</p>
+      <div class="cmeta"><div class="cm"><div class="cmk">Type</div><div class="cmv">Fashion Popup</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">Event / Film</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Art Direction</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2024</div></div></div>
+      <p class="ctxt">Music and fashion event in the old Burberry factory London 2024. Connecting designers from UK and Japan to sell together and build community underground.</p>
+      <p class="cnote">Direction, styling, graphics, publishing, photography.</p>
     </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase(3)"><td class="wt">Bloobouba / Kxiikxxikiii<br><span class="tag">Fragrance</span><span class="tag">Identity</span></td><td class="wd">Luk Rix</td><td class="wd">Product / Identity</td><td class="wy">2024</td><td class="wtog" id="cb3">+</td></tr>
+    <tr class="wrow" onclick="toggleCase(3)"><td class="wt">Perfume<br><span class="tag">Fragrance</span><span class="tag">Identity</span></td><td class="wd">Luk Rix</td><td class="wd">Product / Identity</td><td class="wy">2024</td><td class="wtog" id="cb3">+</td></tr>
     <tr class="crow"><td colspan="5"><div class="cinner" id="ci3">
       <div class="cimgs-wrap"><div class="cimgs-track" id="ct3"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1541643600914-78b084683702?w=900&q=80" alt=""></div></div></div>
       <div class="cimgs-count" id="cc3">1 / 2</div>
@@ -163,59 +195,78 @@ button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spaci
       <p class="cnote">Creative direction, naming, packaging concept, multilingual copywriting. Bottled in France.</p>
     </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase(4)"><td class="wt">Hardwear Objects<br><span class="tag">Object</span><span class="tag">Metal</span></td><td class="wd">Luk Rix</td><td class="wd">Industrial Design</td><td class="wy">2024</td><td class="wtog" id="cb4">+</td></tr>
+    <tr class="wrow" onclick="toggleCase(4)"><td class="wt">Esense<br><span class="tag">Object</span><span class="tag">Metal</span></td><td class="wd">Luk Rix</td><td class="wd">Industrial Design</td><td class="wy">2024</td><td class="wtog" id="cb4">+</td></tr>
     <tr class="crow"><td colspan="5"><div class="cinner" id="ci4">
       <div class="cimgs-wrap"><div class="cimgs-track" id="ct4"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1616469829941-c7200edec809?w=900&q=80" alt=""></div></div></div>
       <div class="cimgs-count" id="cc4">1 / 2</div>
       <div class="cmeta"><div class="cm"><div class="cmk">Brand</div><div class="cmv">Luk Rix</div></div><div class="cm"><div class="cmk">Materials</div><div class="cmv">Al / Steel / Bronze</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Object Design</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2024</div></div></div>
-      <p class="ctxt">Machined aluminium lighter case, stainless steel key fob in solid bar stock, cast bronze ear weight. Each piece is a study in weight and finish — how an object sits in a hand, resists being put down.</p>
-      <p class="cnote">Object design, material specification, production liaison.</p>
+      <p class="ctxt">Machined stainless steel.</p>
+      <p class="cnote">R&amp;D, material specification, prototyping.</p>
     </div></td></tr>
 
-    <tr class="wrow" onclick="toggleCase(5)"><td class="wt">Softwear Collection<br><span class="tag">Fashion</span><span class="tag">RTW</span></td><td class="wd">Luk Rix</td><td class="wd">Fashion Design</td><td class="wy">2024</td><td class="wtog" id="cb5">+</td></tr>
+    <tr class="wrow" onclick="toggleCase(5)"><td class="wt">Shelltek<br><span class="tag">Music</span><span class="tag">RTW</span></td><td class="wd">Gentle Mutilation</td><td class="wd">Fashion Design</td><td class="wy">2024</td><td class="wtog" id="cb5">+</td></tr>
     <tr class="crow"><td colspan="5"><div class="cinner" id="ci5">
       <div class="cimgs-wrap"><div class="cimgs-track" id="ct5"><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=900&q=80" alt=""></div><div class="cimgs-slide"><img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=900&q=80" alt=""></div></div></div>
       <div class="cimgs-count" id="cc5">1 / 2</div>
-      <div class="cmeta"><div class="cm"><div class="cmk">Brand</div><div class="cmv">Luk Rix</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">RTW Collection</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Fashion / Garment</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2024</div></div></div>
-      <p class="ctxt">Cotton heavyweight hoodie, PureSilk performance hoodie, London trench in leather and cotton duck. Heavy weight fabrics cut to a relaxed architectural silhouette. Industrial material, couture construction.</p>
-      <p class="cnote">Design, pattern development, material sourcing. Manufactured UK and Portugal.</p>
+      <div class="cmeta"><div class="cm"><div class="cmk">Brand</div><div class="cmv">Gentle Mutilation</div></div><div class="cm"><div class="cmk">Format</div><div class="cmv">RTW Collection</div></div><div class="cm"><div class="cmk">Discipline</div><div class="cmv">Fashion / Garment</div></div><div class="cm"><div class="cmk">Year</div><div class="cmv">2024</div></div></div>
+      <p class="ctxt">Consultant director, graphics, styling, visualisation, detailing.</p>
     </div></td></tr>
-
   </table>
 </div>
 
 <!-- ARCHIVE -->
 <div id="p-archive" class="panel">
-  <div class="pbar"><span class="pbar-title">Archive — Photography</span><span class="pbar-meta" id="arc-count-bar">1 / 146</span></div>
-  <div class="arc-wrap">
-    <div class="arc-track" id="arcTrack"></div>
-    <button class="arc-prev" onclick="arcMove(-1)"></button>
-    <button class="arc-next" onclick="arcMove(1)"></button>
-  </div>
-  <div class="arc-count" id="arcCount">1 / 146</div>
-</div>
+  <div class="pbar"><span class="pbar-title">Archive</span><span class="pbar-meta"></span></div>
+  <table class="ftbl">
+    <tr class="frow" onclick="toggleFolder(0)"><td class="ft">Normal People Are People You Don't Know Yet</td><td class="fd">Photography</td><td class="ftog" id="fb0">+</td></tr>
+    <tr class="frow-inner"><td colspan="3"><div class="finner" id="fi0">
+      <div class="farc-wrap"><div class="farc-track" id="ftrk0"><div class="farc-slide"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt="" loading="lazy"></div><div class="farc-slide"><img src="IMAGES/ARCHIVE/00002LUKRIX.jpg" alt="" loading="lazy"></div><div class="farc-slide"><img src="IMAGES/ARCHIVE/00003LUKRIX.jpg" alt="" loading="lazy"></div></div></div>
+      <div class="farc-nav"><button class="farc-btn" onclick="fmove(0,-1)">← Prev</button><div class="farc-count" id="fcnt0">1 / 3</div><button class="farc-btn" onclick="fmove(0,1)">Next →</button></div>
+    </div></td></tr>
 
-<!-- GM -->
-<div id="p-gm" class="panel">
-  <div class="pbar"><span class="pbar-title">Gentle Mutilation</span><span class="pbar-meta"></span></div>
-  <div class="gmflag"><b>Previous chapter.</b> Work produced under the Gentle Mutilation identity. Retained as record.</div>
-  <div class="gmgrid">
-    <div class="gmcell"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" alt=""><div class="gmlbl">Lookbook 001</div></div>
-    <div class="gmcell"><img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&q=80" alt=""><div class="gmlbl">Editorial 2019</div></div>
-    <div class="gmcell"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80" alt=""><div class="gmlbl">Object Series</div></div>
-    <div class="gmcell"><img src="https://images.unsplash.com/photo-1532453288672-3a17ac36f5e8?w=600&q=80" alt=""><div class="gmlbl">Lookbook 002</div></div>
-  </div>
+    <tr class="frow" onclick="toggleFolder(1)"><td class="ft">Chinese Bikers — Pearl River Delta</td><td class="fd">Photography</td><td class="ftog" id="fb1">+</td></tr>
+    <tr class="frow-inner"><td colspan="3"><div class="finner" id="fi1">
+      <div class="farc-wrap"><div class="farc-track" id="ftrk1"><div class="farc-slide"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt="" loading="lazy"></div><div class="farc-slide"><img src="IMAGES/ARCHIVE/00002LUKRIX.jpg" alt="" loading="lazy"></div></div></div>
+      <div class="farc-nav"><button class="farc-btn" onclick="fmove(1,-1)">← Prev</button><div class="farc-count" id="fcnt1">1 / 2</div><button class="farc-btn" onclick="fmove(1,1)">Next →</button></div>
+    </div></td></tr>
+
+    <tr class="frow" onclick="toggleFolder(2)"><td class="ft">Rush Hour</td><td class="fd">Photography</td><td class="ftog" id="fb2">+</td></tr>
+    <tr class="frow-inner"><td colspan="3"><div class="finner" id="fi2">
+      <div class="farc-wrap"><div class="farc-track" id="ftrk2"><div class="farc-slide"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt="" loading="lazy"></div><div class="farc-slide"><img src="IMAGES/ARCHIVE/00002LUKRIX.jpg" alt="" loading="lazy"></div></div></div>
+      <div class="farc-nav"><button class="farc-btn" onclick="fmove(2,-1)">← Prev</button><div class="farc-count" id="fcnt2">1 / 2</div><button class="farc-btn" onclick="fmove(2,1)">Next →</button></div>
+    </div></td></tr>
+
+    <tr class="frow" onclick="toggleFolder(3)"><td class="ft">Dust Rust</td><td class="fd">Photography</td><td class="ftog" id="fb3">+</td></tr>
+    <tr class="frow-inner"><td colspan="3"><div class="finner" id="fi3">
+      <div class="farc-wrap"><div class="farc-track" id="ftrk3"><div class="farc-slide"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt="" loading="lazy"></div><div class="farc-slide"><img src="IMAGES/ARCHIVE/00002LUKRIX.jpg" alt="" loading="lazy"></div></div></div>
+      <div class="farc-nav"><button class="farc-btn" onclick="fmove(3,-1)">← Prev</button><div class="farc-count" id="fcnt3">1 / 2</div><button class="farc-btn" onclick="fmove(3,1)">Next →</button></div>
+    </div></td></tr>
+
+    <tr class="frow" onclick="toggleFolder(4)"><td class="ft">Gentle Mutilation</td><td class="fd">Photography</td><td class="ftog" id="fb4">+</td></tr>
+    <tr class="frow-inner"><td colspan="3"><div class="finner" id="fi4">
+      <div class="farc-wrap"><div class="farc-track" id="ftrk4"><div class="farc-slide"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt="" loading="lazy"></div><div class="farc-slide"><img src="IMAGES/ARCHIVE/00002LUKRIX.jpg" alt="" loading="lazy"></div></div></div>
+      <div class="farc-nav"><button class="farc-btn" onclick="fmove(4,-1)">← Prev</button><div class="farc-count" id="fcnt4">1 / 2</div><button class="farc-btn" onclick="fmove(4,1)">Next →</button></div>
+    </div></td></tr>
+
+    <tr class="frow" onclick="toggleFolder(5)"><td class="ft">The Mass Shooting in Paris</td><td class="fd">Photography</td><td class="ftog" id="fb5">+</td></tr>
+    <tr class="frow-inner"><td colspan="3"><div class="finner" id="fi5">
+      <div class="farc-wrap"><div class="farc-track" id="ftrk5"><div class="farc-slide"><img src="IMAGES/ARCHIVE/00001LUKRIX.jpg" alt="" loading="lazy"></div><div class="farc-slide"><img src="IMAGES/ARCHIVE/00002LUKRIX.jpg" alt="" loading="lazy"></div></div></div>
+      <div class="farc-nav"><button class="farc-btn" onclick="fmove(5,-1)">← Prev</button><div class="farc-count" id="fcnt5">1 / 2</div><button class="farc-btn" onclick="fmove(5,1)">Next →</button></div>
+    </div></td></tr>
+  </table>
 </div>
 
 <!-- INFO -->
 <div id="p-info" class="panel">
   <div class="pbar"><span class="pbar-title">Info</span><span class="pbar-meta"></span></div>
   <div class="info-lines">
-    Luk Rix Studio<br>Luke Frith-Powell<br>Luk Gentle / Gentle Mutilation / @gen.mut<br>
-    London, UK<br>Fashion, Object, Art Direction, Photography, Film, Graphic<br>
+    Bowtime CC<br>Agile creative team<br>
+    New gen multidisciplinary practitioners + expert specialists<br>
+    London + Global<br>
+    Fashion, Object, Art Direction, Photography, Film, Graphic<br>
     Clients available on request<br>
-    <a href="https://lukrix.com">lukrix.com</a><br>
-    <a href="https://instagram.com/gen.mut">@gen.mut</a><br>
+    <a href="https://gentlemutilation.com">Gentle Mutilation</a><br>
+    <a href="https://instagram.com/gen.mut">IG: @gen.mut</a><br>
     <a href="https://bowtime.studio">bowtime.studio</a>
   </div>
 </div>
@@ -228,253 +279,228 @@ button,a{font-family:inherit;font-size:inherit;letter-spacing:inherit;word-spaci
 </div>
 
 <script>
-// ─── state ────────────────────────────────────────────
-var menuOpen  = false;
-var menuFocus = 0;
-var caseOpen  = -1;   // -1 = none, 0-5 = open index
-var caseImg   = [];   // current image index per case
-var arcIdx    = 0;
-var arcBuilt  = false;
-var ARC       = 146;
-var PAGES     = ['index','work','archive','gm','info','contact'];
-var NCASES    = 6;
+// ── PASSWORDS ─────────────────────────────────────────
+var PW = {
+  'LUK':'LK#9x2mQ',
+  'NIK':'NK#4vR8wP',
+  'APL':'AP#7kJ3nT',
+  'HRV':'HV#2mX6qB',
+  'STD':'ST#5nW1cF',
+  'OGV':'OG#8pL4yZ',
+  'BRK':'BK#3tD9hE'
+};
 
-// init caseImg counters
-for(var i=0;i<NCASES;i++) caseImg.push(0);
+// ── STATE ─────────────────────────────────────────────
+var menuOpen=false, menuFocus=0;
+var caseOpen=-1, caseImg=[0,0,0,0,0,0];
+var folderOpen=-1, folderImg=[0,0,0,0,0,0];
+var NCASES=6, NFOLDERS=6;
+var PAGES=['index','work','archive','info','contact'];
 
-// ─── helpers ──────────────────────────────────────────
-function mis(){ return Array.from(document.querySelectorAll('.mi')); }
-function pid(){ var p=document.querySelector('.panel.open'); return p?p.id.replace('p-',''):null; }
-function pi(id){ return PAGES.indexOf(id); }
+// ── HELPERS ───────────────────────────────────────────
+function mis(){return Array.from(document.querySelectorAll('.mi'));}
+function pid(){var p=document.querySelector('.panel.open');return p?p.id.replace('p-',''):null;}
+function pi(id){return PAGES.indexOf(id);}
+function setMF(i){menuFocus=Math.max(0,Math.min(i,PAGES.length-1));mis().forEach(function(b,j){b.classList.toggle('focused',j===menuFocus);});}
+function setRowHL(i){document.querySelectorAll('.wtbl tr.wrow').forEach(function(r,j){r.classList.toggle('focused',j===i);});}
+function setFHL(i){document.querySelectorAll('.ftbl tr.frow').forEach(function(r,j){r.classList.toggle('ffocused',j===i);});}
 
-function setMF(i){
-  menuFocus=Math.max(0,Math.min(i,PAGES.length-1));
-  mis().forEach(function(b,j){ b.classList.toggle('focused',j===menuFocus); });
+// ── GATE ──────────────────────────────────────────────
+function gateMsg(txt,err){
+  var el=document.getElementById('gateMsg');
+  el.textContent=txt;
+  el.className='gate-msg show'+(err?' err':'');
+  if(!err) setTimeout(function(){el.classList.remove('show');},3000);
 }
-function clearMF(){ mis().forEach(function(b){ b.classList.remove('focused'); }); }
-
-function setRowHL(i){
-  document.querySelectorAll('.wtbl tr.wrow').forEach(function(r,j){
-    r.classList.toggle('focused',j===i);
-  });
+function unlockWork(){
+  document.getElementById('p-work').classList.remove('work-locked');
+  var g=document.getElementById('workGate');
+  if(g) g.classList.add('hidden');
+  sessionStorage.setItem('bt_work','1');
+}
+function getID(){
+  return (document.getElementById('gid1').value+
+          document.getElementById('gid2').value+
+          document.getElementById('gid3').value).toUpperCase();
 }
 
-// ─── menu ─────────────────────────────────────────────
-window.toggleMenu = function(){
+// auto-advance between ID boxes and auto-check on third char
+document.getElementById('gid1').addEventListener('input',function(){
+  this.value=this.value.toUpperCase();
+  if(this.value.length===1) document.getElementById('gid2').focus();
+});
+document.getElementById('gid2').addEventListener('input',function(){
+  this.value=this.value.toUpperCase();
+  if(this.value.length===1) document.getElementById('gid3').focus();
+});
+document.getElementById('gid3').addEventListener('input',function(){
+  this.value=this.value.toUpperCase();
+  if(this.value.length===1){
+    var id=getID();
+    if(PW[id]){gateMsg('Access granted.',false);setTimeout(unlockWork,400);}
+  }
+});
+
+window.gateSubmit=function(){
+  var id=getID();
+  var email=document.getElementById('gateEmail').value.trim();
+  if(id.length<3){gateMsg('Enter your 3-letter ID.',true);return;}
+  if(PW[id]){unlockWork();return;}
+  if(!email){gateMsg('Email required to request access.',true);return;}
+  gateMsg('Request received.',false);
+  ['gid1','gid2','gid3','gateEmail','gateNote'].forEach(function(i){document.getElementById(i).value='';});
+};
+
+// restore session if already unlocked
+if(sessionStorage.getItem('bt_work')==='1') unlockWork();
+
+// ── MENU ──────────────────────────────────────────────
+window.toggleMenu=function(){
   menuOpen=!menuOpen;
   document.getElementById('menu').classList.toggle('open',menuOpen);
-  if(menuOpen){ var cur=pid(); setMF(cur?pi(cur):0); }
-  else clearMF();
+  if(menuOpen){var cur=pid();setMF(cur?pi(cur):0);}
+  else mis().forEach(function(b){b.classList.remove('focused');});
 };
 
-// ─── panels ───────────────────────────────────────────
-window.selectPage = function(id,btn){
-  if(pid()===id){ closePanel(); return; }
+// ── PANELS ────────────────────────────────────────────
+window.selectPage=function(id){
+  if(pid()===id){closePanel();return;}
   openPanel(id);
 };
-
 function openPanel(id){
-  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('open'); });
-  mis().forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('open');});
+  mis().forEach(function(b){b.classList.remove('on');});
   var p=document.getElementById('p-'+id);
-  if(p){ p.classList.add('open'); p.scrollTop=0; }
+  if(p){p.classList.add('open');p.scrollTop=0;}
   var b=document.querySelector('.mi[data-panel="'+id+'"]');
   if(b) b.classList.add('on');
   setMF(pi(id));
-  if(id==='archive') buildCarousel();
-  // reset case state when entering work
-  if(id!=='work'){ caseOpen=-1; setRowHL(-1); }
+  if(id!=='work'){caseOpen=-1;setRowHL(-1);}
+  if(id!=='archive'){folderOpen=-1;setFHL(-1);}
 }
-
 function closePanel(){
-  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('open'); });
-  mis().forEach(function(b){ b.classList.remove('on','focused'); });
-  closeCase();
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('open');});
+  mis().forEach(function(b){b.classList.remove('on','focused');});
+  closeCase();closeFolder();
 }
 
-// ─── cases ────────────────────────────────────────────
-window.toggleCase = function(idx){
-  if(caseOpen===idx){ closeCase(); return; }
-  closeCase();
-  caseOpen=idx;
-  var el=document.getElementById('ci'+idx);
-  var btn=document.getElementById('cb'+idx);
-  if(el){ el.classList.add('open'); el.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+// ── CASES ─────────────────────────────────────────────
+window.toggleCase=function(idx){
+  if(caseOpen===idx){closeCase();return;}
+  closeCase();caseOpen=idx;
+  var el=document.getElementById('ci'+idx),btn=document.getElementById('cb'+idx);
+  if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'nearest'});}
   if(btn) btn.textContent='−';
-  setRowHL(idx);
-  updateCaseImgs(idx);
+  setRowHL(idx);updateCImgs(idx);
 };
-
 function closeCase(){
   if(caseOpen>=0){
-    var el=document.getElementById('ci'+caseOpen);
-    var btn=document.getElementById('cb'+caseOpen);
+    var el=document.getElementById('ci'+caseOpen),btn=document.getElementById('cb'+caseOpen);
     if(el) el.classList.remove('open');
     if(btn) btn.textContent='+';
   }
-  caseOpen=-1;
-  setRowHL(-1);
+  caseOpen=-1;setRowHL(-1);
 }
-
-// per-case image carousel
-function updateCaseImgs(idx){
-  var track=document.getElementById('ct'+idx);
-  var count=document.getElementById('cc'+idx);
-  if(!track) return;
-  var total=track.children.length;
-  var ci=caseImg[idx];
-  track.style.transform='translateX(-'+(ci*100)+'%)';
-  if(count) count.textContent=(ci+1)+' / '+total;
+function updateCImgs(idx){
+  var t=document.getElementById('ct'+idx),c=document.getElementById('cc'+idx);
+  if(!t) return;
+  t.style.transform='translateX(-'+(caseImg[idx]*100)+'%)';
+  if(c) c.textContent=(caseImg[idx]+1)+' / '+t.children.length;
 }
-
-function caseImgMove(dir){
+function cImgMove(dir){
   if(caseOpen<0) return;
-  var track=document.getElementById('ct'+caseOpen);
-  if(!track) return;
-  var total=track.children.length;
-  caseImg[caseOpen]=(caseImg[caseOpen]+dir+total)%total;
-  updateCaseImgs(caseOpen);
+  var t=document.getElementById('ct'+caseOpen);if(!t) return;
+  caseImg[caseOpen]=(caseImg[caseOpen]+dir+t.children.length)%t.children.length;
+  updateCImgs(caseOpen);
 }
 
-// ─── archive carousel ─────────────────────────────────
-function arcFile(n){ return 'IMAGES/ARCHIVE/'+String(n).padStart(5,'0')+'LUKRIX.jpg'; }
-
-function buildCarousel(){
-  if(arcBuilt) return; arcBuilt=true;
-  var track=document.getElementById('arcTrack');
-  for(var i=1;i<=ARC;i++){
-    var slide=document.createElement('div'); slide.className='arc-slide';
-    var img=document.createElement('img'); img.alt='';
-    if(i<=3){ img.src=arcFile(i); } else { img.dataset.src=arcFile(i); }
-    slide.appendChild(img); track.appendChild(slide);
+// ── FOLDERS ───────────────────────────────────────────
+window.toggleFolder=function(idx){
+  if(folderOpen===idx){closeFolder();return;}
+  closeFolder();folderOpen=idx;
+  var el=document.getElementById('fi'+idx),btn=document.getElementById('fb'+idx);
+  if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  if(btn) btn.textContent='−';
+  setFHL(idx);updateFImgs(idx);
+};
+function closeFolder(){
+  if(folderOpen>=0){
+    var el=document.getElementById('fi'+folderOpen),btn=document.getElementById('fb'+folderOpen);
+    if(el) el.classList.remove('open');
+    if(btn) btn.textContent='+';
   }
-  arcUpdate();
+  folderOpen=-1;setFHL(-1);
 }
-
-function arcUpdate(){
-  var track=document.getElementById('arcTrack');
-  track.style.transform='translateX(-'+(arcIdx*100)+'%)';
-  var label=(arcIdx+1)+' / '+ARC;
-  var c=document.getElementById('arcCount');
-  var cb=document.getElementById('arc-count-bar');
-  if(c) c.textContent=label;
-  if(cb) cb.textContent=label;
-  var slides=track.querySelectorAll('.arc-slide img');
-  [arcIdx,arcIdx+1,arcIdx+2].forEach(function(i){
-    if(slides[i]&&slides[i].dataset.src){ slides[i].src=slides[i].dataset.src; delete slides[i].dataset.src; }
-  });
+function updateFImgs(idx){
+  var t=document.getElementById('ftrk'+idx),c=document.getElementById('fcnt'+idx);
+  if(!t) return;
+  t.style.transform='translateX(-'+(folderImg[idx]*100)+'%)';
+  if(c) c.textContent=(folderImg[idx]+1)+' / '+t.children.length;
 }
-
-window.arcMove = function(dir){
-  arcIdx=(arcIdx+dir+ARC)%ARC;
-  arcUpdate();
+window.fmove=function(idx,dir){
+  var t=document.getElementById('ftrk'+idx);if(!t) return;
+  folderImg[idx]=(folderImg[idx]+dir+t.children.length)%t.children.length;
+  updateFImgs(idx);
 };
 
-// ─── dot ──────────────────────────────────────────────
+// ── DOT ───────────────────────────────────────────────
 var dot=document.getElementById('dot');
-function toggleMode(){ var d=document.body.getAttribute('data-mode')==='dark'; document.body.setAttribute('data-mode',d?'light':'dark'); }
-dot.addEventListener('mousedown',  function(e){ e.preventDefault(); dot.classList.add('held'); });
-dot.addEventListener('mouseup',    function(e){ e.preventDefault(); dot.classList.remove('held'); toggleMode(); });
-dot.addEventListener('touchstart', function(e){ e.preventDefault(); dot.classList.add('held'); },{passive:false});
-dot.addEventListener('touchend',   function(e){ e.preventDefault(); dot.classList.remove('held'); toggleMode(); },{passive:false});
-dot.addEventListener('click',      function(e){ e.stopPropagation(); });
+function toggleMode(){var d=document.body.getAttribute('data-mode')==='dark';document.body.setAttribute('data-mode',d?'light':'dark');}
+dot.addEventListener('mousedown',function(e){e.preventDefault();dot.classList.add('held');});
+dot.addEventListener('mouseup',function(e){e.preventDefault();dot.classList.remove('held');toggleMode();});
+dot.addEventListener('touchstart',function(e){e.preventDefault();dot.classList.add('held');},{passive:false});
+dot.addEventListener('touchend',function(e){e.preventDefault();dot.classList.remove('held');toggleMode();},{passive:false});
+dot.addEventListener('click',function(e){e.stopPropagation();});
 
-// ─── keyboard ─────────────────────────────────────────
-// ↓         = open menu / down menu / down work rows
-// ↑         = up menu (top→close) / up work rows
-// →         = open panel from menu / open case from row / next image in case or archive
-// ←         = prev image in case or archive / close case / close panel+reopen menu
-// Escape    = close case → close panel → close menu
-
+// ── KEYBOARD ──────────────────────────────────────────
 document.addEventListener('keydown',function(e){
-  var cur=pid();
-  var k=e.key;
+  var cur=pid(),k=e.key;
 
-  // Escape chain
   if(k==='Escape'){
-    if(cur==='work'&&caseOpen>=0){ e.preventDefault(); closeCase(); return; }
-    if(cur){ e.preventDefault(); closePanel(); window.toggleMenu(); return; }
-    if(menuOpen){ e.preventDefault(); window.toggleMenu(); return; }
+    if(cur==='work'&&caseOpen>=0){e.preventDefault();closeCase();return;}
+    if(cur==='archive'&&folderOpen>=0){e.preventDefault();closeFolder();return;}
+    if(cur){e.preventDefault();closePanel();window.toggleMenu();return;}
+    if(menuOpen){e.preventDefault();window.toggleMenu();return;}
     return;
   }
 
-  // nothing open — ↓ opens menu
-  if(!menuOpen&&!cur){
-    if(k==='ArrowDown'){ e.preventDefault(); window.toggleMenu(); }
-    return;
-  }
+  // if focus is in a gate input, don't intercept
+  var active=document.activeElement;
+  if(active&&(active.classList.contains('gate-id')||active.classList.contains('gate-field')||active.classList.contains('gate-note'))) return;
 
-  // menu open
+  if(!menuOpen&&!cur){if(k==='ArrowDown'){e.preventDefault();window.toggleMenu();}return;}
+
   if(menuOpen){
-    if(k==='ArrowDown'){ e.preventDefault(); setMF(menuFocus+1); return; }
-    if(k==='ArrowUp'){
-      e.preventDefault();
-      if(menuFocus<=0){ window.toggleMenu(); return; }
-      setMF(menuFocus-1); return;
-    }
-    if(k==='ArrowRight'||k==='Enter'){ e.preventDefault(); openPanel(PAGES[menuFocus]); return; }
-    if(k==='ArrowLeft'){ e.preventDefault(); window.toggleMenu(); return; }
+    if(k==='ArrowDown'){e.preventDefault();setMF(menuFocus+1);return;}
+    if(k==='ArrowUp'){e.preventDefault();if(menuFocus<=0){window.toggleMenu();return;}setMF(menuFocus-1);return;}
+    if(k==='ArrowRight'||k==='Enter'){e.preventDefault();openPanel(PAGES[menuFocus]);return;}
+    if(k==='ArrowLeft'){e.preventDefault();window.toggleMenu();return;}
   }
 
-  // panel open
   if(cur){
-
-    // archive: ← → images
-    if(cur==='archive'){
-      if(k==='ArrowRight'){ e.preventDefault(); window.arcMove(1); return; }
-      if(k==='ArrowLeft'){  e.preventDefault(); window.arcMove(-1); return; }
-    }
-
-    // work panel
     if(cur==='work'){
-      // case open: → next image, ← prev image or close case
       if(caseOpen>=0){
-        if(k==='ArrowRight'){ e.preventDefault(); caseImgMove(1); return; }
-        if(k==='ArrowLeft'){
-          e.preventDefault();
-          if(caseImg[caseOpen]>0){ caseImgMove(-1); }
-          else { closeCase(); }
-          return;
-        }
+        if(k==='ArrowRight'){e.preventDefault();cImgMove(1);return;}
+        if(k==='ArrowLeft'){e.preventDefault();if(caseImg[caseOpen]>0){cImgMove(-1);}else{closeCase();}return;}
       }
-      // ↓ = next row / open if none focused
-      if(k==='ArrowDown'){
-        e.preventDefault();
-        var next=caseOpen<0 ? 0 : Math.min(caseOpen+1,NCASES-1);
-        window.toggleCase(next); return;
-      }
-      // ↑ = prev row / close if at top
-      if(k==='ArrowUp'){
-        e.preventDefault();
-        if(caseOpen<=0){ closeCase(); return; }
-        window.toggleCase(caseOpen-1); return;
-      }
-      // → opens focused/first case
-      if(k==='ArrowRight'){
-        e.preventDefault();
-        window.toggleCase(caseOpen<0?0:caseOpen); return;
-      }
-      // ← closes panel back to menu
-      if(k==='ArrowLeft'){
-        e.preventDefault();
-        closeCase(); closePanel(); window.toggleMenu(); return;
-      }
+      if(k==='ArrowDown'){e.preventDefault();window.toggleCase(caseOpen<0?0:Math.min(caseOpen+1,NCASES-1));return;}
+      if(k==='ArrowUp'){e.preventDefault();if(caseOpen<=0){closeCase();return;}window.toggleCase(caseOpen-1);return;}
+      if(k==='ArrowRight'){e.preventDefault();window.toggleCase(caseOpen<0?0:caseOpen);return;}
+      if(k==='ArrowLeft'){e.preventDefault();closeCase();closePanel();window.toggleMenu();return;}
     }
-
-    // any panel: ← = close panel, reopen menu
-    if(k==='ArrowLeft'){
-      e.preventDefault();
-      closePanel(); window.toggleMenu(); return;
+    if(cur==='archive'){
+      if(folderOpen>=0){
+        if(k==='ArrowRight'){e.preventDefault();window.fmove(folderOpen,1);return;}
+        if(k==='ArrowLeft'){e.preventDefault();if(folderImg[folderOpen]>0){window.fmove(folderOpen,-1);}else{closeFolder();}return;}
+      }
+      if(k==='ArrowDown'){e.preventDefault();window.toggleFolder(folderOpen<0?0:Math.min(folderOpen+1,NFOLDERS-1));return;}
+      if(k==='ArrowUp'){e.preventDefault();if(folderOpen<=0){closeFolder();return;}window.toggleFolder(folderOpen-1);return;}
+      if(k==='ArrowRight'){e.preventDefault();window.toggleFolder(folderOpen<0?0:folderOpen);return;}
+      if(k==='ArrowLeft'){e.preventDefault();closeFolder();closePanel();window.toggleMenu();return;}
     }
-    // any panel: ↓↑ switch between pages
-    if(k==='ArrowDown'){
-      e.preventDefault();
-      var ni=pi(cur); if(ni<PAGES.length-1) openPanel(PAGES[ni+1]); return;
-    }
-    if(k==='ArrowUp'){
-      e.preventDefault();
-      var pi2=pi(cur); if(pi2>0){ openPanel(PAGES[pi2-1]); } else { closePanel(); window.toggleMenu(); } return;
-    }
+    if(k==='ArrowLeft'){e.preventDefault();closePanel();window.toggleMenu();return;}
+    if(k==='ArrowDown'){e.preventDefault();var ni=pi(cur);if(ni<PAGES.length-1) openPanel(PAGES[ni+1]);return;}
+    if(k==='ArrowUp'){e.preventDefault();var pi2=pi(cur);if(pi2>0){openPanel(PAGES[pi2-1]);}else{closePanel();window.toggleMenu();}return;}
   }
 });
 </script>
